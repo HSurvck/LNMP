@@ -16,11 +16,11 @@ tar xf nginx-1.10.3.tar.gz
 
 cd nginx-1.10.3
 
-./configure --prefix=/application/nginx/ --error-log-path=/application/nginx/error.log --http-log-path=/application/nginx/access.log --user=www --group=www --with-http_ssl_module --with-http_stub_status_module 
+./configure --prefix=/application/nginx/ --user=www --group=www --with-http_ssl_module --with-http_stub_status_module 
 
 make && make install
 
-ln -s /application/nginx-1.10.3 /application/nginx
+cd && ln -s /application/nginx-1.10.3/ /application/nginx
 
 echo "/application/nginx/sbin/nginx" >> /etc/rc.local
 
@@ -40,7 +40,7 @@ cd libiconv-1.14 && ./configure --prefix=/usr/local/libiconv
 
 make && make install
 
-cd /server/tools/ && wget --tries=0 http://mirrors.sohu.com/php/php-5.5.32.tar.gz
+cd /server/tools/ && wget --tries=0 http://ftp.ntu.edu.tw/php/distributions/php-5.5.32.tar.gz
 
 tar xf php-5.5.32.tar.gz
 
@@ -88,7 +88,7 @@ cd php-5.5.32 &&  touch ext/phar/phar.phar
 #--with-openssl[=Dir]
 make && make install
 
-ln -s /application/php-5.5.32/ /application/php
+cd && ln -s /application/php-5.5.32/ /application/php
 
 cd /server/tools/php-5.5.32 && cp php.ini-production /application/php/lib/php.ini
 
@@ -131,6 +131,7 @@ http {
 			fastcgi_pass  127.0.0.1:9000;
 			fastcgi_index index.php;
 			include fastcgi.conf;
+		}
 	}
 	server {
 		listen       80;
