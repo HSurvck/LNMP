@@ -61,4 +61,3 @@ fi
 
 /application/mysql/bin/mysql -u root -e "create database wordpress;"
 /application/mysql/bin/mysql -u root -e "grant all privileges on wordpress.* to 'wordpress'@'10.0.0.%' identified by '123456';"
-
