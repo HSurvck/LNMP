@@ -4,14 +4,14 @@
 
 ssh-keygen -t dsa -f /root/.ssh/id_dsa -P "" -q
 
+yum install libselinux-python -y
+
+yum install ansible -y
+
 for ip in 5 6 7 8 9 31 41 51
 do 
    sshpass -p123456 ssh-copy-id -i /root/.ssh/id_dsa.pub "-o StrictHostKeyChecking=no root@172.16.1.$ip"
 done
-
-yum install libselinux-python -y
-
-yum install ansible -y
 
 if [ $? -ne 0 ]
 then
