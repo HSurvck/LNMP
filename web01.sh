@@ -6,7 +6,7 @@ yum install gcc gcc-c++
 
 yum install -y pcre-devel openssl-devel
 
-egrep "^www.*/sbin/nologin$" /etc/passwd && useradd -s /sbin/nologin -M www
+egrep "^www.*/sbin/nologin$" /etc/passwd || useradd -s /sbin/nologin -M www
 
 mkdir -p /server/tools && cd /server/tools
 
@@ -16,7 +16,7 @@ tar xf nginx-1.10.3.tar.gz
 
 cd nginx-1.10.3
 
-./configure --prefix=/application/nginx1.10.3 --user=www --group=www --with-http_ssl_module --with-http_stub_status_module 
+./configure --prefix=/application/nginx-1.10.3 --user=www --group=www --with-http_ssl_module --with-http_stub_status_module 
 
 make && make install
 

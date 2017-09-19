@@ -1,20 +1,20 @@
-- host: backup
+- hosts: backup
   tasks:
     - name: install rsync
       script: /root/LNMP/backup.sh
-- host: nfs
+- hosts: nfs
   tasks:
     - name: install nfs rpc
       script: /root/LNMP/nfs.sh
-- host: db
+- hosts: db
   tasks:
     - name: install mysql
       script: /root/LNMP/db01.sh
-- host: web
+- hosts: web
   tasks:
     - name: install nginx php wordpress nfs rpc
       script: /root/LNMP/web01.sh
-- host: lb
+- hosts: lb
   tasks:
     - name: install nginx
       script: /root/LNMP/lb01.sh
