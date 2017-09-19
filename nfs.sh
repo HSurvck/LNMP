@@ -1,4 +1,23 @@
 #!/bin/bash
+
+rpm -qa nfs-utils || yum install -y nfs-utils
+
+rpm -qa rpcbind || yum install -y rpcbind
+
+cat >>/etc/exports << EOF
+/data 172.16.1.0/24(rw,sync,no_all_squash,root_squash)
+EOF
+
+mkdir -p /data/web{01..03} && chown -R nfsnobody.nfsnobody /data
+
+/etc/init.d/rpcbind restart
+
+chkconfig rpcbind on
+
+/etc/init.d/nfs restart
+
+chkconfig nfs on
+
 yum install inotify-tools -y
 
 test -f /usr/bin/rsync || yum install rsync -y
@@ -25,24 +44,4 @@ chmod +x /etc/init.d/inotify
 /etc/init.d/inotify
 
 chkconfig --add inotify  && chkconfig inotify on
-
-rpm -qa nfs-utils || yum install -y nfs-utils
-
-rpm -qa rpcbind || yum install -y rpcbind
-
-cat >>/etc/exports << EOF
-/data 172.16.1.0/24(rw,sync,no_all_squash,root_squash)
-EOF
-
-mkdir -p /data/web{01..03} && chown -R nfsnobody.nfsnobody /data
-
-/etc/init.d/rpcbind restart
-
-chkconfig rpcbind on
-
-/etc/init.d/nfs restart
-
-chkconfig nfs on
-
-
 
