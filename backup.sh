@@ -25,8 +25,8 @@ auth users = rsync_backup
 secrets file = $PassWordDir
 
 [backup]
-comment = "backup dir by oldboy"	
-path = $BackupDir	
+comment = "backup dir by oldboy"
+path = $BackupDir
 EOF
 
 test -d $BackupDir || mkdir $BackupDir -p ;chown -R rsync.rsync $BackupDir

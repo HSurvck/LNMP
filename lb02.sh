@@ -80,13 +80,10 @@ echo "/application/nginx/sbin/nginx" >> /etc/rc.local
 
 test -f /etc/init.d/keepalived || yum install -y keepalived
 
-mkdir -p /server/scripts && cat > /server/scripts/check_web <<EOF
+mkdir -p /server/scripts && cat > /server/scripts/check_web.sh <<EOF
 #!/bin/bash
 
-if [ `ps -ef |grep -c [n]ginx` -lt 2 ]
-	then
-	/etc/init.d/keepalived stop
-fi
+test [ `ps -ef |grep -c [n]ginx` -lt 2 ] && /etc/init.d/keepalived stop
 
 EOF
 
@@ -108,10 +105,10 @@ interval 2
 weight 2
 }
 vrrp_instance VI_1 {
-    state MASTER
+    state BACKUP
     interface eth0
     virtual_router_id 51
-    priority 150
+    priority 100
     advert_int 1
     authentication {
         auth_type PASS
@@ -120,12 +117,15 @@ vrrp_instance VI_1 {
     virtual_ipaddress {
         10.0.0.3
     }
+	track_script {
+		check_web.sh
+	}
 }
 vrrp_instance VI_2 {
-    state BACKUP
+    state MASTER
     interface eth0
     virtual_router_id 52
-    priority 100
+    priority 150
     advert_int 1
     authentication {
         auth_type PASS
@@ -134,9 +134,7 @@ vrrp_instance VI_2 {
     virtual_ipaddress {
         10.0.0.4
     }
-	track_script {
-		check_web
-	}
+
 }
 EOF
 
