@@ -6,7 +6,7 @@ yum install gcc gcc-c++
 
 yum install -y pcre-devel openssl-devel
 
-useradd -s /sbin/nologin -M www
+egrep "^www.*/sbin/nologin$" /etc/passwd && useradd -s /sbin/nologin -M www
 
 mkdir -p /server/tools && cd /server/tools
 
@@ -16,7 +16,7 @@ tar xf nginx-1.10.3.tar.gz
 
 cd nginx-1.10.3
 
-./configure --prefix=/application/nginx/ --user=www --group=www --with-http_ssl_module --with-http_stub_status_module 
+./configure --prefix=/application/nginx1.10.3 --user=www --group=www --with-http_ssl_module --with-http_stub_status_module 
 
 make && make install
 
@@ -31,14 +31,6 @@ wget --tries=0 -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel
 yum install -y zlib libjpeg freetype libpng gd curl zlib-devel libxml2-devel libjpeg-devel freetype-devel libpng-devel gd-devel curl-devel libjpeg-turbo-devel libcurl-devel libxslt-devel
 
 yum -y install libmcrypt-devel mhash mcrypt libiconv-devel
-
-cd /server/tools/ && wget --tries=0 http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.14.tar.gz
-
-tar xf libiconv-1.14.tar.gz
-
-cd libiconv-1.14 && ./configure --prefix=/usr/local/libiconv
-
-make && make install
 
 cd /server/tools/ && wget --tries=0 http://ftp.ntu.edu.tw/php/distributions/php-5.5.32.tar.gz
 
@@ -95,8 +87,6 @@ cd /server/tools/php-5.5.32 && cp php.ini-production /application/php/lib/php.in
 cd /application/php/etc/ && cp php-fpm.conf.default php-fpm.conf
 
 echo "/application/php/sbin/php-fpm" >> /etc/rc.local && /application/php/sbin/php-fpm
-
-
 
 AppDir=/application/nginx         #106 108
 ConfDir=/application/nginx/conf   #112
