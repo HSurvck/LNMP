@@ -1,8 +1,6 @@
 #!/bin/bash
 
-rpm -qa nfs-utils || yum install -y nfs-utils
-
-rpm -qa rpcbind || yum install -y rpcbind
+test -f /etc/init.d/rpcbind || yum install -y rpcbind ;test -f /etc/init.d/nfs || yum install -y nfs-utils
 
 cat >>/etc/exports << EOF
 /data 172.16.1.0/24(rw,sync,no_all_squash,root_squash)

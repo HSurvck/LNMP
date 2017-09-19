@@ -19,6 +19,7 @@ then
 echo "LALALA~"
 
 else
+
 cat >> /etc/ansible/hosts <<EOF
 [lb]
 172.16.1.5
@@ -39,6 +40,7 @@ cat >> /etc/ansible/hosts <<EOF
 172.16.1.51
 EOF
 
+ansible all -m ping
+
 fi
 
-ansible all -m ping
