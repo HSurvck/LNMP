@@ -6,7 +6,11 @@ cat >>/etc/exports << EOF
 /data 172.16.1.0/24(rw,sync,no_all_squash,root_squash)
 EOF
 
-mkdir -p /data/web{01..03} && chown -R nfsnobody.nfsnobody /data
+for i in wordpress dedecms discuz
+do
+mkdir -p /data/$i
+done
+chown -R nfsnobody.nfsnobody /data && chmod 1777 /data/*
 
 /etc/init.d/rpcbind restart
 

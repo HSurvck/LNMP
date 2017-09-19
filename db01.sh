@@ -61,6 +61,7 @@ fi
 
 /application/mysql/bin/mysql -u root -e "create database wordpress;"
 /application/mysql/bin/mysql -u root -e "grant all privileges on wordpress.* to 'wordpress'@'10.0.0.%' identified by '123456';"
+/application/mysql/bin/mysql -u root -e "use wordpress; update wp_options set option_value='wp-content/uploads' where option_name='upload_path';"
 /application/mysql/bin/mysql -u root -e "create database dedecms;"
 /application/mysql/bin/mysql -u root -e "grant all privileges on dedecms.* to 'dedecms'@'10.0.0.%' identified by '123456';"
 /application/mysql/bin/mysql -u root -e "create database discuz;"

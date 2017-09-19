@@ -156,7 +156,7 @@ tar xf /server/tools/wordpress-4.7.3.tar.gz
 
 cd /server/tools/wordpress && mv ./*  /application/nginx/html/blog/
 
-chown -R www.www /application/nginx/html/blog/
+mkdir -p ${AppDir}/html/blog/wp-content/uploads && chown -R www.www /application/nginx/html/blog/
 
 rm -rf /server/tools/wordpress
 
@@ -172,6 +172,6 @@ yum install -y rpcbind
 
 chkconfig nfs on
 
-echo "mount -t nfs ${Ip}:/data/web01 ${AppDir}/html/blog/wp-content/uploads" >> /etc/rc.local && mount -t nfs ${Ip}:/data/web01 ${AppDir}/html/blog/wp-content/uploads
+echo "mount -t nfs ${Ip}:/data/wordpress ${AppDir}/html/blog/wp-content/uploads" >> /etc/rc.local && mount -t nfs ${Ip}:/data/wordpress ${AppDir}/html/blog/wp-content/uploads
 
 df -h
