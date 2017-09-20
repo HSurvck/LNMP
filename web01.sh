@@ -32,8 +32,9 @@ yum install -y zlib libjpeg freetype libpng gd curl zlib-devel libxml2-devel lib
 
 yum -y install libmcrypt-devel mhash mcrypt libiconv-devel
 
-cd /server/tools/ && wget --tries=0 http://ftp.ntu.edu.tw/php/distributions/php-5.5.32.tar.gz
-
+cd /server/tools/ && \
+test -f php-5.5.32.tar.gz || \
+wget --tries=0 http://ftp.ntu.edu.tw/php/distributions/php-5.5.32.tar.gz && \
 tar xf php-5.5.32.tar.gz
 
 cd php-5.5.32 &&  touch ext/phar/phar.phar
