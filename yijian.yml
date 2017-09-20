@@ -2,10 +2,14 @@
   tasks:
     - name: install rsync
       script: /root/LNMP/backup.sh
+    - name: backup_server
+      cron: name=backup_server minute=00 hour=01 job='/bin/sh /server/scripts/backup_server.sh &>/dev/null'
 - hosts: nfs
   tasks:
     - name: install nfs rpc
       script: /root/LNMP/nfs.sh
+    - name: backup_nfs
+      cron: name=backup_nfs minute=00 hour=00 job='/bin/sh /server/scripts/backup_nfs.sh &>/dev/null'
 - hosts: db
   tasks:
     - name: install mysql
@@ -14,7 +18,13 @@
   tasks:
     - name: install nginx php wordpress nfs rpc
       script: /root/LNMP/web01.sh
-- hosts: lb
+    - name: backup_web
+      cron: name=backup_nfs minute=00 hour=00 job='/bin/sh /server/scripts/backup_web.sh &>/dev/null'
+- hosts: lb01
   tasks:
     - name: install nginx
       script: /root/LNMP/lb01.sh
+- hosts: lb02
+  tasks:
+    - name: install nginx
+      script: /root/LNMP/lb02.sh

@@ -128,7 +128,13 @@ http {
 		server_name  www.etiantian.org;
 		location / {
 			root   html/www;
-			index  index.html;
+			index  index.php index.html;
+		}
+		location ~* .*\.(php|php5)?$ {
+			root html/www;
+			fastcgi_pass  127.0.0.1:9000;
+			fastcgi_index index.php;
+			include fastcgi.conf;
 		}
 	}
 	server {
@@ -136,7 +142,13 @@ http {
 		server_name  bbs.etiantian.org;
 		location / {
 			root   html/bbs;
-			index  index.html;
+			index  index.php index.html;
+		}
+		location ~* .*\.(php|php5)?$ {
+			root html/bbs;
+			fastcgi_pass  127.0.0.1:9000;
+			fastcgi_index index.php;
+			include fastcgi.conf;
 		}
 	}
 	server {
@@ -150,28 +162,114 @@ http {
 }
 EOF
 
-cd /server/tools && wget --tries=0 https://wordpress.org/wordpress-4.7.3.tar.gz
+#web zhan dian
 
-tar xf /server/tools/wordpress-4.7.3.tar.gz
+cd /server/tools && \
+test -f /server/tools/wordpress-4.7.3-zh_CN.tar.gz || \
+wget --tries=0 https://wordpress.org/wordpress-4.7.3.tar.gz &&\
+tar xf /server/tools/wordpress-4.7.3*
 
-cd /server/tools/wordpress && mv ./*  /application/nginx/html/blog/
+cd /server/tools/wordpress && \
+mv ./*  /application/nginx/html/blog/
 
-mkdir -p ${AppDir}/html/blog/wp-content/uploads && chown -R www.www /application/nginx/html/blog/
+mkdir -p ${AppDir}/html/blog/wp-content/uploads && \
+chown -R www.www /application/nginx/html/blog/
 
 rm -rf /server/tools/wordpress
 
-/application/nginx/sbin/nginx -t && /application/nginx/sbin/nginx -s reload
+cd /server/tools && \
+test -f /server/tools/DedeCMS-V5.7-UTF8-SP2.tar.gz || \
+wget --tries=0 http://updatenew.dedecms.com/base-v57/package/DedeCMS-V5.7-UTF8-SP2.tar.gz && \
+tar xf DedeCMS-V5.7-UTF8-SP2.tar.gz
 
-Ip=172.16.1.31
+cd /server/tools/DedeCMS-V5.7-UTF8-SP2/uploads && \
+mv ./* /application/nginx/html/www/ && \
+chown -R www.www /application/nginx/html/www/
+
+cd /application/nginx/html/www/uploads && rm -rf ./*
+
+rm -rf /server/tools/DedeCMS-V5.7-UTF8-SP2
+
+cd /server/tools && \
+test -f /server/tools/Discuz_X3.2_SC_UTF8.zip || \
+wget --tries=0 http://download.comsenz.com/DiscuzX/3.2/Discuz_X3.2_SC_UTF8.zip && \
+unzip Discuz_X3.2_SC_UTF8.zip -d ./Discuz_X3.2_SC_UTF8
+
+cd /server/tools/Discuz_X3.2_SC_UTF8/upload && \
+mv ./* /application/nginx/html/bbs/ && \
+chown -R www.www /application/nginx/html/bbs/
+
+cd /application/nginx/html/bbs/data/attachment/ && rm -rf ./*
+
+rm -rf /server/tools/Discuz_X3.2_SC_UTF8
+
+
+/application/nginx/sbin/nginx -t && \
+/application/nginx/sbin/nginx -s reload
+
+#nfs_web
+
+Ip=172.16.1.35
 
 yum install -y nfs-utils
 
 yum install -y rpcbind
 
-/etc/init.d/rpcbind restart && /etc/init.d/nfs restart
+/etc/init.d/rpcbind restart && \
+/etc/init.d/nfs restart
 
 chkconfig nfs on
 
-echo "mount -t nfs ${Ip}:/data/wordpress ${AppDir}/html/blog/wp-content/uploads" >> /etc/rc.local && mount -t nfs ${Ip}:/data/wordpress ${AppDir}/html/blog/wp-content/uploads
+mount -t nfs ${Ip}:/data/wordpress ${AppDir}/html/blog/wp-content/uploads
+mount -t nfs ${Ip}:/data/dedecms ${AppDir}/html/www/uploads
+mount -t nfs ${Ip}:/data/discuz ${AppDir}/html/bbs/data/attachment
+
+cat >> /etc/rc.local <<EOF
+mount -t nfs ${Ip}:/data/wordpress ${AppDir}/html/blog/wp-content/uploads
+mount -t nfs ${Ip}:/data/dedecms ${AppDir}/html/www/uploads
+mount -t nfs ${Ip}:/data/discuz ${AppDir}/html/bbs/data/attachment
+EOF
 
 df -h
+
+
+#backup_web
+
+test -f /usr/bin/rsync || yum install rsync -y
+
+test -d /backup || mkdir /backup
+
+PassWord=oldboy123
+PassWordDir=/etc/rsync.password
+
+echo "$PassWord" > $PassWordDir && chmod 600 $PassWordDir
+
+mkdir /server/scripts/ -p && cat > /server/scripts/backup_web.sh <<EOF
+#!/bin/bash
+
+Backup_Dir="/backup"
+Host_IP=\`hostname -i\`
+Date_Info=\`date +%F_%w -d "-1day"\`
+
+# create backup dir
+mkdir -p \$Backup_Dir/\$Host_IP
+
+# backup info compress
+cd / &&\
+tar zchf \$Backup_Dir/\$Host_IP/sys_backup_\${Date_Info}.tar.gz var/spool/cron/root etc/rc.local server/scripts etc/sysconfig/iptables &&\
+tar zchf \$Backup_Dir/\$Host_IP/www_backup__\${Date_Info}.tar.gz application/nginx/html/www/ &&\
+tar zchf \$Backup_Dir/\$Host_IP/bbs_backup__\${Date_Info}.tar.gz application/nginx/html/bbs/ &&\
+tar zchf \$Backup_Dir/\$Host_IP/blog_backup__\${Date_Info}.tar.gz application/nginx/html/blog/ &&\
+tar zchf \$Backup_Dir/\$Host_IP/logs_backup__\${Date_Info}.tar.gz application/nginx/logs/
+
+# check data info, create finger file
+cd \$Backup_Dir &&\
+find ./ -type f -name "*_\${Date_Info}.tar.gz"|\
+xargs md5sum >\$Backup_Dir/\$Host_IP/finger.txt
+
+# push backup data to backup server
+rsync -az \$Backup_Dir/ rsync_backup@172.16.1.41::backup --password-file=/etc/rsync.password
+
+# delete 7 day ago
+find \$Backup_Dir/ -type f -name "*.tar.gz" -mtime +7 -delete
+EOF

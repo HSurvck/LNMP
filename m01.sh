@@ -21,8 +21,10 @@ echo "LALALA~"
 else
 
 cat >> /etc/ansible/hosts <<EOF
-[lb]
+[lb01]
 172.16.1.5
+
+[lb02]
 172.16.1.6
 
 [nfs]

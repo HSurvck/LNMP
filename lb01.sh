@@ -78,12 +78,14 @@ echo "/application/nginx/sbin/nginx" >> /etc/rc.local
 
 /application/nginx/sbin/nginx -t && /application/nginx/sbin/nginx
 
+#keepalived
+
 test -f /etc/init.d/keepalived || yum install -y keepalived
 
-mkdir -p /server/scripts && cat > /server/scripts/check_web <<EOF
+mkdir -p /server/scripts && cat > /server/scripts/check_web.sh <<EOF
 #!/bin/bash
 
-if [ `ps -ef |grep -c [n]ginx` -lt 2 ]
+if [ \`ps -ef |grep -c [n]ginx\` -lt 2 ]
 	then
 	/etc/init.d/keepalived stop
 fi
@@ -145,7 +147,7 @@ cat > /server/scripts/start_keepalived.sh <<EOF
 
 while ture
 do
-	test [ `ps -ef |grep -c [n]ginx` -gt 1 ] && /etc/init.d/keepalived start
+	test [ \`ps -ef |grep -c [n]ginx\` -gt 1 ] && /etc/init.d/keepalived start
 done &
 EOF
 
