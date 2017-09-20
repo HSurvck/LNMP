@@ -58,7 +58,7 @@ mkdir -p /server/scripts && cat > /server/scripts/backup_server.sh <<EOF
 
 # check data info
 cd /backup
-find /backup/ -type f -name "finger.txt"|\
+find /backup/ -type f -name "finger.txt"| \\
 xargs md5sum -c >/tmp/check_info.txt
 
 # send mail to sa
@@ -118,13 +118,13 @@ vrrp_instance VI_3 {
 }
 EOF
 
-cat > /server/scripts/start_keepalived.sh <<EOF
-#!/bin/bash
-
-while ture
-do
-	test [ \`ps -ef |grep -c [n]ginx\` -gt 1 ] && /etc/init.d/keepalived start
-done &
-EOF
-
-echo "/bin/bash /server/scripts/start_keepalived.sh" >> /etc/rc.local && /bin/bash /server/scripts/start_keepalived.sh
+#cat > /server/scripts/start_keepalived.sh <<EOF
+##!/bin/bash
+#
+#while true
+#do
+#	test [ \`ps -ef |grep -c [n]ginx\` -gt 1 ] && /etc/init.d/keepalived start
+#done &
+#EOF
+#
+#echo "/bin/bash /server/scripts/start_keepalived.sh" >> /etc/rc.local && /bin/bash /server/scripts/start_keepalived.sh

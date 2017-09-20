@@ -58,12 +58,12 @@ Date_Info=\`date +%F_%w -d "-1day"\`
 mkdir -p \$Backup_Dir/\$Host_IP
 
 # backup info compress
-cd / &&\
+cd / && \\
 tar zchf \$Backup_Dir/\$Host_IP/sys_backup_\${Date_Info}.tar.gz var/spool/cron/root etc/rc.local server/scripts etc/sysconfig/iptables
 
 # check data info, create finger file
-cd \$Backup_Dir &&\
-find ./ -type f -name "*_\${Date_Info}.tar.gz"|\
+cd \$Backup_Dir && \\
+find ./ -type f -name "*_\${Date_Info}.tar.gz" | \\
 xargs md5sum >\$Backup_Dir/\$Host_IP/finger.txt
 
 # push backup data to backup server
@@ -115,13 +115,13 @@ vrrp_instance VI_3 {
 }
 EOF
 
-cat > /server/scripts/start_keepalived.sh <<EOF
-#!/bin/bash
-
-while ture
-do
-	test [ \`ps -ef |grep -c [n]ginx\` -gt 1 ] && /etc/init.d/keepalived start
-done &
-EOF
-
-echo "/bin/bash /server/scripts/start_keepalived.sh" >> /etc/rc.local && /bin/bash /server/scripts/start_keepalived.sh
+#cat > /server/scripts/start_keepalived.sh <<EOF
+##!/bin/bash
+#
+#while true
+#do
+#	test [ \`ps -ef |grep -c [n]ginx\` -gt 1 ] && /etc/init.d/keepalived start
+#done &
+#EOF
+#
+#echo "/bin/bash /server/scripts/start_keepalived.sh" >> /etc/rc.local && /bin/bash /server/scripts/start_keepalived.sh

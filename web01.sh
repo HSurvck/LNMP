@@ -256,11 +256,11 @@ Date_Info=\`date +%F_%w -d "-1day"\`
 mkdir -p \$Backup_Dir/\$Host_IP
 
 # backup info compress
-cd / &&\
-tar zchf \$Backup_Dir/\$Host_IP/sys_backup_\${Date_Info}.tar.gz var/spool/cron/root etc/rc.local server/scripts etc/sysconfig/iptables &&\
-tar zchf \$Backup_Dir/\$Host_IP/www_backup__\${Date_Info}.tar.gz application/nginx/html/www/ &&\
-tar zchf \$Backup_Dir/\$Host_IP/bbs_backup__\${Date_Info}.tar.gz application/nginx/html/bbs/ &&\
-tar zchf \$Backup_Dir/\$Host_IP/blog_backup__\${Date_Info}.tar.gz application/nginx/html/blog/ &&\
+cd / && \\
+tar zchf \$Backup_Dir/\$Host_IP/sys_backup_\${Date_Info}.tar.gz var/spool/cron/root etc/rc.local server/scripts etc/sysconfig/iptables && \\
+tar zchf \$Backup_Dir/\$Host_IP/www_backup__\${Date_Info}.tar.gz application/nginx/html/www/ && \\
+tar zchf \$Backup_Dir/\$Host_IP/bbs_backup__\${Date_Info}.tar.gz application/nginx/html/bbs/ && \\
+tar zchf \$Backup_Dir/\$Host_IP/blog_backup__\${Date_Info}.tar.gz application/nginx/html/blog/ && \\
 tar zchf \$Backup_Dir/\$Host_IP/logs_backup__\${Date_Info}.tar.gz application/nginx/logs/
 
 # check data info, create finger file
