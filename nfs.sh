@@ -101,7 +101,7 @@ global_defs {
 }
 vrrp_instance VI_3 {
     state MASTER
-    interface eth0
+    interface eth1
     virtual_router_id 66
     priority 150
     advert_int 1
@@ -110,7 +110,7 @@ vrrp_instance VI_3 {
         auth_pass 1111
     }
     virtual_ipaddress {
-        10.0.0.35
+        172.16.1.35
     }
 }
 EOF
