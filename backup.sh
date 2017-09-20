@@ -118,6 +118,8 @@ vrrp_instance VI_3 {
 }
 EOF
 
+/etc/init.d/keepalived start
+
 #cat > /server/scripts/start_keepalived.sh <<EOF
 ##!/bin/bash
 #

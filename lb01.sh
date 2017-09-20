@@ -142,13 +142,15 @@ vrrp_instance VI_2 {
 }
 EOF
 
-cat > /server/scripts/start_keepalived.sh <<EOF
-#!/bin/bash
+/etc/init.d/keepalived start
 
-while ture
-do
-	test [ \`ps -ef |grep -c [n]ginx\` -gt 1 ] && /etc/init.d/keepalived start
-done &
-EOF
-
-echo "/bin/bash /server/scripts/start_keepalived.sh" >> /etc/rc.local && /bin/bash /server/scripts/start_keepalived.sh
+#cat > /server/scripts/start_keepalived.sh <<EOF
+##!/bin/bash
+#
+#while ture
+#do
+#	test [ \`ps -ef |grep -c [n]ginx\` -gt 1 ] && /etc/init.d/keepalived start
+#done &
+#EOF
+#
+#echo "/bin/bash /server/scripts/start_keepalived.sh" >> /etc/rc.local && /bin/bash /server/scripts/start_keepalived.sh
