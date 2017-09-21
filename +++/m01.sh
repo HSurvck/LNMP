@@ -33,9 +33,11 @@ cat >> /etc/ansible/hosts <<EOF
 [backup]
 172.16.1.41
 
-[web]
+[web0102]
 172.16.1.7
 172.16.1.8
+
+[web03]
 172.16.1.9
 
 [db]
