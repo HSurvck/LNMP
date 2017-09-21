@@ -29,7 +29,7 @@ list = false
 hosts allow = 172.16.1.0/24
 hosts deny = 0.0.0.0/32
 auth users = rsync_backup
-secrets file = \$PassWordDir
+secrets file = $PassWordFile
 
 [backup]
 comment = "backup dir by oldboy"
