@@ -210,7 +210,7 @@ rm -rf /server/tools/Discuz_X3.2_SC_UTF8
 
 #nfs_web
 
-Ip=172.16.1.35
+Ip=172.16.1.31
 
 yum install -y nfs-utils
 
