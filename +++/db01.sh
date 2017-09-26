@@ -1,5 +1,9 @@
 #!/bin/bash
 
+test -f /usr/sbin/ntpdate || yum -y install ntpdate
+echo "*/5 * * * * /usr/sbin/ntpdate 172.16.1.61 >/dev/null 2>&1" > /var/spool/cron/root
+sed -i "21a\server 172.16.1.61 perfer" /etc/ntp.conf
+
 mkdir -p /application
 
 if [ -f /server/tools/mysql-5.6.34-linux-glibc2.5-x86_64.tar.gz ]

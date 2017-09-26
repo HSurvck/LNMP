@@ -1,0 +1,524 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>yum源仓搭建</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 15px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  color: #777;
+  font-size: 14px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 12px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 1px 4px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+</head>
+<body>
+<h1><center>yum源仓搭建</h1>
+<h2>1. 本地YUM仓库搭建实战</h2>
+<p>YUM主要用于自动安装、升级rpm软件包，它能自动查找并解决rpm包之间的依赖关系。要成功的使用YUM工具安装更新软件或系统，就需要有一个包含各种rpm软件包的repository（软件仓库），这个软件仓库我们习惯称为yum源。网络上有大量的yum源，但由于受到网络环境的限制，导致软件安装耗时过长甚至失败。特别是当有大量服务器大量软件包需要安装时，缓慢的进度条令人难以忍受。因此我们在优化系统时，都会更换国内的源。</p>
+<p>相比较而言，本地YUM源服务器最大优点是局域网的快速网络连接和稳定性。有了局域网中的YUM源服务器，即便在Internet连接中断的情况下，也不会影响其他YUM客户端的软件安装和升级。</p>
+<h3>1.1 服务端配置</h3>
+<pre>
+#1.创建yum仓库目录,rpm包都上至此目录
+
+mkdir -p /application/yum/centos6.6/x86_64/
+
+#2.安装createrepo软件
+
+yum -y install createrepo
+
+#3.初始化repodata索引文件
+
+createrepo -pdo /application/yum/centos6.6/x86_64/ /application/yum/centos6.6/x86_64/
+
+#4.进入需要提供仓库的目录
+
+cd /application/yum/centos6.6/x86_64/
+
+#5.可以用Apache或nginx提供web服务，但用Python的http模块更简单，适用于内网环境, 可以通过浏览器输入本机IP查看。
+
+python -m SimpleHTTPServer 80 &>/dev/null &
+
+
+#6.每加入一个rpm包就要更新一下
+
+createrepo --update /application/yum/centos6.6/x86_64/
+
+#修改yum配置文件keepacache=0改为1，保存下载过的软件
+
+sed -i 's#keepcache=0#keepcache=1#g' /etc/yum.conf
+
+#安装包存储目录= /var/cache/yum/x86_64/6/base/packages
+
+cachedir=/var/cache/yum/$basearch/$releasever
+</pre>
+<h3>1.2客户端配置</h3>
+<pre>
+
+cd /etc/yum.repos.d
+
+[root@B yum.repos.d]# vi prow.repo	#连接本地yum源
+
+[prow]
+
+name=prow
+
+baseurl=http://10.0.0.5
+
+enable=1
+
+gpgcheck=0
+
+[root@YUM ~]# yum --enablerepo=prow --disablerepo=base,extras,updates,epel list	#指定使用xuliangwei库(临时生效)
+
+[root@oldboy yum.repos.d]# vim /etc/yum.repos.d/CentOS-Base.repo
+
+# 在每一个启动的源加上
+
+# enabled=0#改为1就启用，没有此参数也是启用。
+
+[base]
+
+…………
+
+enabled=0
+
+[updates]
+
+…………
+
+enabled=0
+
+[extras]
+
+…………
+
+enabled=0
+
+# 还有其他开启的仓库就使用这个办法关闭
+</pre>
+<p><code>vim /etc/yum.repos.d/CentOS-Base.repo.backup</code></p>
+<pre>
+  1 # CentOS-Base.repo
+  2 #
+  3 # The mirror system uses the connecting IP address of the client and the
+  4 # update status of each mirror to pick mirrors that are updated to and
+  5 # geographically close to the client.  You should use this for CentOS updates
+  6 # unless you are manually picking other mirrors.
+  7 #
+  8 # If the mirrorlist= does not work for you, as a fall back you can try the 
+  9 # remarked out baseurl= line instead.
+ 10 #
+ 11 #
+ 12 
+ 13 [base]
+ 14 name=CentOS-$releasever - Base
+ 15 mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=os&infra=$infra
+ 16 #baseurl=http://mirror.centos.org/centos/$releasever/os/$basearch/
+ 17 gpgcheck=1
+ 18 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+ 19 
+ 20 #released updates 
+ 21 [updates]
+ 22 name=CentOS-$releasever - Updates
+ 23 mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=updates&infra=$infra
+ 24 #baseurl=http://mirror.centos.org/centos/$releasever/updates/$basearch/
+ 25 gpgcheck=1
+ 26 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+ 27 
+ 28 #additional packages that may be useful
+ 29 [extras]
+ 30 name=CentOS-$releasever - Extras
+ 31 mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=extras&infra=$infra
+ 32 #baseurl=http://mirror.centos.org/centos/$releasever/extras/$basearch/
+ 33 gpgcheck=1
+ 34 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+ 35 
+ 36 #additional packages that extend functionality of existing packages
+ 37 [centosplus]
+ 38 name=CentOS-$releasever - Plus
+ 39 mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=centosplus&infra=$infra
+ 40 #baseurl=http://mirror.centos.org/centos/$releasever/centosplus/$basearch/
+ 41 gpgcheck=1
+ 42 enabled=0
+ 43 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+ 44 
+ 45 #contrib - packages by Centos Users
+ 46 [contrib]
+ 47 name=CentOS-$releasever - Contrib
+ 48 mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=contrib&infra=$infra
+ 49 #baseurl=http://mirror.centos.org/centos/$releasever/contrib/$basearch/
+ 50 gpgcheck=1
+ 51 enabled=0
+ 52 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+</pre>
+<h2>2. Yum服务配置文件</h2>
+<h4>2.1全局配置文件</h4>
+<p>main部分定义了全局配置选项，整个yum配置文件应该只有一个main，位于/etc/yum.cof</p>
+<pre>
+[root@XuBuSi ~]# cat /etc/yum.conf
+
+[main]
+
+cachedir=/var/cache/yum/$basearch/$releasever	#yum缓存的目录，存储下载的rpm包和数据库
+
+keepcache=0	#安装完成后是否保留软件包，0为不保留(默认为0)，1为保留
+
+debuglevel=2	#Debug信息输出等级，范围为0-10，缺省为2
+
+logfile=/var/log/yum.log	#日志文件位置
+
+exactarch=1	#有1和0两个选项，设置为1，则yum只会安装和系统架构匹配的软件包。
+
+obsoletes=1	#update的参数，相当于upgrade，允许更新陈旧的RPM包。
+
+gpgcheck=1
+
+plugins=1	#是否启用插件，默认1为允许，0表示不允许
+
+installonly_limit=5
+
+bugtracker_url=http://bugs.centos.org/set_project.php?project_id=16&ref=http://bugs.centos.org/bug_report_page.php?category=yum
+
+distroverpkg=centos-release	#指定一个软件包，yum会根据这个包判断发行版本
+</pre>
+<h4>2.2yum仓库配置文件</h4>
+<p>repository部分定义了每个源服务器的具体配置，可以有一到多个，位于/etc/yum.repos.d/目录下的各文件中</p>
+<pre>
+[root@XuBuSi ~]# ll /etc/yum.repos.d/
+
+CentOS-Base.repo	#网络源的配置文件
+
+CentOS-Media.repo	#本地源的配置文件
+
+epel.repo		#第三方源的配置文件
+</pre>
+<h4>2.3配置本地yum源</h4>
+<pre>
+[root@XuBuSi ~]# grep -v "^#" /etc/yum.repos.d/CentOS-Media.repo
+
+[c6-media]
+
+name=CentOS-$releasever - Media
+
+baseurl=file:///media/CentOS/
+
+file:///media/cdrom/	#修改为/mnt/cdrom(即为光盘挂载点)
+
+file:///media/cdrecorder/
+
+gpgcheck=1
+
+enabled=0	#改为1就启动，没有此参数也是启用。
+
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+
+#当然也可以像上面自己写一个文件,然后指定为下载点即可
+</pre>
+<h2>3. 企业yum仓库搭建实战</h2>
+<p>上面只是将自己制作的rpm包，放入yum源。但还有一种企业需求，说的更具体一点，平时学生上课yum安装软件都是从公网下载的，占用带宽，因此在学校里搭建一个内网yum服务器，但又考虑到学生回家也要使用yum安装软件，如果yum软件的数据库文件repodata不一样，就会有问题。因此我想到的解决方法就是直接使用公网yum源的repodata。</p>
+<p>镜像同步公网yum源上游yum源必须要支持rsync协议，否则不能使用rsync进行同步。<a href="http://mirrors.ustc.edu.cn/status/">http://mirrors.ustc.edu.cn/status/
+</a></p>
+<p>CentOS官方标准源：<a href="rsync://mirrors.ustc.edu.cn/centos/">rsync://mirrors.ustc.edu.cn/centos/</a></p>
+<p>epel源：<a href="rsync://mirrors.ustc.edu.cn/epel/">rsync://mirrors.ustc.edu.cn/epel/</a></p>
+<p>同步命令：</p>
+<pre>
+# 使用rsync同步yum源，为了节省带宽、磁盘和下载时间，我只同步了CentOS6的rpm包，这样所有的rpm包只占用了21G，全部同步需要300G左右。
+
+# 同步base源，小技巧，我们安装系统的光盘镜像含有部分rpm包，大概3G，这些就不用重新下载。
+
+/usr/bin/rsync -av rsync://mirrors.ustc.edu.cn/centos/6/os/x86_64/ /data/yum_data/centos/6/os/x86_64/
+
+/usr/bin/rsync -av rsync://mirrors.ustc.edu.cn/centos/6/extras/x86_64/ /data/yum_data/centos/6/extras/x86_64/
+
+/usr/bin/rsync -av rsync://mirrors.ustc.edu.cn/centos/6/updates/x86_64/ /data/yum_data/centos/6/updates/x86_64/
+
+# epel源
+
+/usr/bin/rsync -av --exclude=debug rsync://mirrors.ustc.edu.cn/epel/6/x86_64/ /data/yum_data/epel/6/x86_64/
+</pre>
+<p>学生使用内网yum源方法</p>
+<p># 可以自建一个内网dns，如果没有，可使用hosts解析。</p>
+<p><code>echo '192.168.0.200 mirrors.aliyun.com' &gt;&gt;/etc/hosts</code></p>
+
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->

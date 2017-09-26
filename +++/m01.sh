@@ -1,5 +1,14 @@
 #!/bin/bash
 
+rm -rf /var/spool/cron/root
+
+sed -i "8d;7a\#restrict default kod nomodify notrap nopeer noquery" /etc/ntp.conf
+sed -i "21a\server pool.ntp.org perfer" /etc/ntp.conf
+
+/etc/init.d/ntpd start
+
+chkconfig ntpd on && chkconfig --list ntpd
+
 \rm -f /root/.ssh/id_dsa*
 
 ssh-keygen -t dsa -f /root/.ssh/id_dsa -P "" -q

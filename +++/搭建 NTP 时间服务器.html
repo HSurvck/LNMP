@@ -1,0 +1,506 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>搭建 NTP 时间服务器</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 15px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  color: #777;
+  font-size: 14px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 12px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 1px 4px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+</head>
+<body>
+<h1><center>搭建 NTP 时间服务器</h1>
+<h2>服务端部署</h2>
+<h3>NTP 服务器安装</h3>
+<p><code>test  -f /etc/init.d/ntpd || yum -y install ntp</code></p>
+<h3>配置 NTP 服务</h3>
+<p>NTP 服务器默认是不运行客户端进行时间同步，所以我们需要配置文件设置允许。</p>
+<pre>
+[root@m01 ~]# cat /etc/ntp.conf -n
+     1	# For more information about this file, see the man pages
+     2	# ntp.conf(5), ntp_acc(5), ntp_auth(5), ntp_clock(5), ntp_misc(5), ntp_mon(5).
+     3	
+     4	driftfile /var/lib/ntp/drift   
+     5	
+     6	# Permit time synchronization with our time source, but do not
+     7	# permit the source to query or modify the service on this system.
+     8	restrict default kod nomodify notrap nopeer noquery
+     9	restrict -6 default kod nomodify notrap nopeer noquery
+    10
+    11	# Permit all access over the loopback interface.  This could
+    12	# be tightened as well, but to do so would effect some of
+    13	# the administrative functions.
+    14	restrict 127.0.0.1 
+    15	restrict -6 ::1
+    16	
+    17	# Hosts on local network are less restricted.
+    18	#restrict 192.168.1.0 mask 255.255.255.0 nomodify notrap
+    19
+    20	# Use public servers from the pool.ntp.org project.
+    21	# Please consider joining the pool (http://www.pool.ntp.org/join.html).
+    22	server 0.centos.pool.ntp.org iburst
+    23	server 1.centos.pool.ntp.org iburst
+    24	server 2.centos.pool.ntp.org iburst
+    25	server 3.centos.pool.ntp.org iburst
+    26	
+    27	#broadcast 192.168.1.255 autokey	# broadcast server
+    28	#broadcastclient			# broadcast client
+    29	#broadcast 224.0.1.1 autokey		# multicast server
+    30	#multicastclient 224.0.1.1		# multicast client
+    31	#manycastserver 239.255.254.254		# manycast server
+    32	#manycastclient 239.255.254.254 autokey # manycast client
+    33	
+    34	# Enable public key cryptography.
+    35	#crypto
+    36	
+    37	includefile /etc/ntp/crypto/pw
+    38	
+    39	# Key file containing the keys and key identifiers used when operating
+    40	# with symmetric key cryptography. 
+    41	keys /etc/ntp/keys
+    42	
+    43	# Specify the key identifiers which are trusted.
+    44	#trustedkey 4 8 42
+    45	
+    46	# Specify the key identifier to use with the ntpdc utility.
+    47	#requestkey 8
+    48	
+    49	# Specify the key identifier to use with the ntpq utility.
+    50	#controlkey 8
+    51	
+    52	# Enable writing of statistics records.
+    53	#statistics clockstats cryptostats loopstats peerstats
+</pre>
+<h4>各个选项信息</h4>
+<ul>
+<li>
+<p>系统时间与BIOS事件的偏差记录</p>
+<pre>
+ 4	driftfile /var/lib/ntp/drift
+</pre>
+</li>
+<li>
+<p>restrict 控制相关权限。</p>
+<ul>
+<li>
+<p>语法为： restrict IP地址 mask 子网掩码 参数</p>
+</li>
+<li>
+<p>其中IP地址也可以是default ，default 就是指所有的IP</p>
+</li>
+<li>
+<p>参数有以下几个：</p>
+<ul>
+<li>
+<p>ignore  ：关闭所有的 NTP 联机服务</p>
+</li>
+<li>
+<p>nomodify：客户端不能更改服务端的时间参数，但是客户端可以通过服务端进行网络校时。</p>
+</li>
+<li>
+<p>notrust ：客户端除非通过认证，否则该客户端来源将被视为不信任子网</p>
+</li>
+<li>
+<p>noquery ：不提供客户端的时间查询：用户端不能使用ntpq，ntpc等命令来查询ntp服务器</p>
+</li>
+<li>
+<p>notrap ：不提供trap远端登陆：拒绝为匹配的主机提供模式 6 控制消息陷阱服务。陷阱服务是 ntpdq 控制消息协议的子系统，用于远程事件日志记录程序。</p>
+</li>
+<li>
+<p>nopeer ：用于阻止主机尝试与服务器对等，并允许欺诈性服务器控制时钟</p>
+</li>
+<li>
+<p>kod ： 访问违规时发送 KoD 包。</p>
+</li>
+<li>
+<p>restrict -6 表示IPV6地址的权限设置。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>设定NTP主机来源（其中prefer表示优先主机），192.168.7.49是本地的NTP服务器，所以优先指定从该主机同步时间。</p>
+<pre>
+21	server 192.168.7.49 prefer 
+22	server 0.centos.pool.ntp.org iburst
+23	server 1.centos.pool.ntp.org iburst
+24	server 2.centos.pool.ntp.org iburst
+25	server 3.centos.pool.ntp.org iburst
+</pre>
+</li>
+</ul>
+<h4>修改 <code>/etc/ntp.conf</code> 配置文件</h4>
+<ol>
+<li>
+<p>将配置文件中第八行 <code>restrict default kod nomodify notrap nopeer noquery</code> 注释掉</p>
+</li>
+<li>
+<p>在配置文件的第20行下插入一行 <code>server time.nist.gov prefer</code></p>
+</li>
+</ol>
+<h3>防火墙 iptables 配置</h3>
+<ul>
+<li>
+<p>查看 ntp 服务端口号</p>
+<pre>
+[root@m01 ~]# ss -lntup | grep ntp
+udp    UNCONN     0      0            172.16.1.61:123                   *:*      users:(("ntpd",1689,20))
+udp    UNCONN     0      0              10.0.0.61:123                   *:*      users:(("ntpd",1689,19))
+udp    UNCONN     0      0              127.0.0.1:123                   *:*      users:(("ntpd",1689,18))
+udp    UNCONN     0      0                      *:123                   *:*      users:(("ntpd",1689,16))
+udp    UNCONN     0      0       fe80::20c:29ff:feba:1c98:123                  :::*      users:(("ntpd",1689,23))
+udp    UNCONN     0      0                    ::1:123                  :::*      users:(("ntpd",1689,22))
+udp    UNCONN     0      0       fe80::20c:29ff:feba:1ca2:123                  :::*      users:(("ntpd",1689,21))
+udp    UNCONN     0      0                     :::123                  :::*      users:(("ntpd",1689,17))
+[root@m01 ~]# 
+</pre>
+</li>
+<li>
+<p>由于NTP服务需要使用到UDP端口号123，所以当系统的防火墙（Iptables）启动的情况下，必须开放UDP端口号123</p>
+<p><code>/sbin/iptables -I INPUT -p udp --dport 123 -j ACCEPT</code></p>
+</li>
+</ul>
+<h3>启动 NTP 时间同步服务，以及一些简单的查询命令</h3>
+<ol>
+<li>
+启动 NTP 时间同步服务
+<code>/etc/init.d/ntpd start</code>
+</li>
+<li>
+设置 NTP 服务器开机自动启动
+<code>chkconfig ntpd on &amp;&amp; chkconfig --list ntpd</code>
+</li>
+<li>
+<p>查看 ntp 服务器的详细状态</p>
+<p><code>watch &quot;ntpq -p&quot;</code> </p>
+<p><code>ctrl +c</code> 退出</p>
+<pre>
+[root@m01 ~]# watch "ntpq -p"
+Every 2.0s: ntpq -p                                                                           Fri Sep 22 09:43:37 2017
+
+     remote           refid	 st t when poll reach   delay   offset  jitter
+==============================================================================
+ time-a.nist.gov .INIT.          16 u    -   64    0    0.000    0.000   0.000
+*ntp2.itcomplian 5.103.128.88     3 u   49   64    1  295.270   16.647   1.372
+ chimera.buffero 128.252.19.1     2 u   46   64    1  293.700  -15.427   0.656
+ 119.23.232.226  202.118.1.46     2 u   47   64    1   73.094  -16.854   0.187
+ marla.ludost.ne .INIT.          16 u    -   64    0    0.000    0.000   0.000
+</pre>
+</li>
+<li>
+<p>显示网络时间同步状态
+<code>ntpstat</code></p>
+<pre>
+[root@m01 ~]# ntpstat
+synchronised to NTP server (66.85.74.226) at stratum 3 
+   time correct to within 660 ms
+   polling server every 64 s
+[root@m01 ~]# 
+</pre>
+</li>
+</ol>
+<h2>客户端部署</h2>
+<ul>
+<li>
+<p>需要 <code>ntpdate</code> 命令</p>
+<p><code>test -f /usr/sbin/ntpdate || yum install -y ntpdate</code></p>
+</li>
+<li>
+<p>测试同步</p>
+<p>ntpdate 10.0.0.61</p>
+</li>
+<li>
+<p>写入到定时任务中</p>
+<pre>
+[root@m01 ~]# crontab -l
+*/5 * * * * /usr/sbin/ntpdate 10.0.0.61 >/dev/null 2>&1
+</pre>
+</li>
+</ul>
+
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->

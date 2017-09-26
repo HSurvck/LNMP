@@ -1,5 +1,9 @@
 #!/bin/bash
 
+test -f /usr/sbin/ntpdate || yum -y install ntpdate
+echo "*/5 * * * * /usr/sbin/ntpdate 172.16.1.61 >/dev/null 2>&1" > /var/spool/cron/root
+sed -i "21a\server 172.16.1.61 perfer" /etc/ntp.conf
+
 yum -y install gcc automake autoconf libtool make
 
 yum install gcc gcc-c++
@@ -8,10 +12,8 @@ yum install -y pcre-devel openssl-devel
 
 egrep "^www.*/sbin/nologin$" /etc/passwd || useradd -s /sbin/nologin -M www
 
-mkdir -p /server/tools && cd /server/tools
-
-wget --tries=0 http://nginx.org/download/nginx-1.10.3.tar.gz
-
+mkdir -p /server/tools && cd /server/tools && test -f nginx-1.10.3.tar.gz || \
+wget --tries=0 http://nginx.org/download/nginx-1.10.3.tar.gz && \
 tar xf nginx-1.10.3.tar.gz
 
 cd nginx-1.10.3
@@ -225,6 +227,28 @@ mount -t nfs ${Ip}:/data/wordpress ${AppDir}/html/blog/wp-content/uploads
 mount -t nfs ${Ip}:/data/dedecms ${AppDir}/html/www/uploads
 mount -t nfs ${Ip}:/data/discuz ${AppDir}/html/bbs/data/attachment
 
+mkdir /server/scripts/ -p && cat > /server/scripts/check_mount.sh <<EOF
+#!/bin/bash
+
+HtmlDir=/application/nginx-1.10.3/html
+Ip=172.16.1.35
+
+while true
+do
+df -h
+if [ $? -ne 0 ]
+then
+umount \${HtmlDir}/blog/wp-content/uploads && mount -t nfs \${Ip}:/data/wordpress \${HtmlDir}/blog/wp-content/uploads
+umount \${HtmlDir}/www/uploads && mount -t nfs \${Ip}:/data/dedecms \${HtmlDir}/www/uploads
+umount \${HtmlDir}/bbs/data/attachment && mount -t nfs \${Ip}:/data/discuz \${HtmlDir}/bbs/data/attachment
+fi
+sleep 10
+done &
+
+EOF
+
+echo "/bin/bash /server/scripts/check_mount.sh" >> /etc/init.d/rc.local && /bin/sh /server/scripts/check_mount.sh
+
 cat >> /etc/rc.local <<EOF
 mount -t nfs ${Ip}:/data/wordpress ${AppDir}/html/blog/wp-content/uploads
 mount -t nfs ${Ip}:/data/dedecms ${AppDir}/html/www/uploads
@@ -245,7 +269,7 @@ PassWordDir=/etc/rsync.password
 
 echo "$PassWord" > $PassWordDir && chmod 600 $PassWordDir
 
-mkdir /server/scripts/ -p && cat > /server/scripts/backup_web.sh <<EOF
+cat > /server/scripts/backup_web.sh <<EOF
 #!/bin/bash
 
 Backup_Dir="/backup"

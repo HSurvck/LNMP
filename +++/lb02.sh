@@ -1,5 +1,9 @@
 #!/bin/bash
 
+test -f /usr/sbin/ntpdate || yum -y install ntpdate
+echo "*/5 * * * * /usr/sbin/ntpdate 172.16.1.61 >/dev/null 2>&1" > /var/spool/cron/root
+sed -i "21a\server 172.16.1.61 prefer" /etc/ntp.conf
+
 yum -y install gcc automake autoconf libtool make
 
 yum install gcc gcc-c++
@@ -8,10 +12,8 @@ yum install -y pcre-devel openssl-devel
 
 egrep "^www.*/sbin/nologin$" /etc/passwd || useradd -s /sbin/nologin -M www
 
-mkdir -p /server/tools && cd /server/tools
-
-wget --tries=0 http://nginx.org/download/nginx-1.10.3.tar.gz
-
+mkdir -p /server/tools && cd /server/tools && test -f nginx-1.10.3.tar.gz || \
+wget --tries=0 http://nginx.org/download/nginx-1.10.3.tar.gz && \
 tar xf nginx-1.10.3.tar.gz
 
 cd nginx-1.10.3
@@ -34,9 +36,9 @@ http {
 	default_type  application/octet-stream;
 	sendfile        on;
 	keepalive_timeout  65;
-	log_format main '$remote_addr - $remote_user [$time_local] "$request" '
-                    '$status $body_bytes_sent "$http_referer" '
-                    '"$http_user_agent" "$http_x_forwarded_for"';
+	log_format main '\$remote_addr - \$remote_user [\$time_local] "\$request" '
+                    '\$status \$body_bytes_sent "\$http_referer" '
+                    '"\$http_user_agent" "\$http_x_forwarded_for"';
 	upstream server_poors {
 		server 10.0.0.8:80;
 		server 10.0.0.7:80;
@@ -47,32 +49,30 @@ http {
         server_name blog.etiantian.org;
         location / {
             proxy_pass http://server_poors;
-            proxy_set_header Host ssss;
-            proxy_set_header X-Forwarded-For xxxxxx;
+            proxy_set_header Host \$host;
+            proxy_set_header X-Forwarded-For \$remote_addr;
         }
 	}
 	server {
-		listen 10.0.0.4:80;
+		listen 10.0.0.3:80;
 		server_name www.etiantian.org;
 		location / {
 			proxy_pass http://server_poors;
-			proxy_set_header Host ssss;
-			proxy_set_header X-Forwarded-For xxxxxx;
+			proxy_set_header Host \$host;
+			proxy_set_header X-Forwarded-For \$remote_addr;
 		}
 	}
 	server {
-		listen 10.0.0.4:80;
+		listen 10.0.0.3:80;
 		server_name bbs.etiantian.org;
 		location / {
 			proxy_pass http://server_poors;
-			proxy_set_header Host ssss;
-			proxy_set_header X-Forwarded-For xxxxxx;
+			proxy_set_header Host \$host;
+			proxy_set_header X-Forwarded-For \$remote_addr;
 		}
 	}
 }
 EOF
-
-sed -i 's#ssss#$host#g' /application/nginx/conf/nginx.conf && sed -i 's#xxxxxx#$remote_addr#g' /application/nginx/conf/nginx.conf
 
 echo "/application/nginx/sbin/nginx" >> /etc/rc.local
 
@@ -115,7 +115,7 @@ vrrp_instance VI_1 {
         auth_pass 1111
     }
     virtual_ipaddress {
-        10.0.0.3
+        10.0.0.3/24 dev eth1 label eth1:1
     }
 	track_script {
 		check_web.sh
@@ -132,7 +132,7 @@ vrrp_instance VI_2 {
         auth_pass 1111
     }
     virtual_ipaddress {
-        10.0.0.4
+        10.0.0.4/24 dev eth1 label eth1:1
     }
 
 }

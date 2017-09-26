@@ -1,0 +1,646 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>定制rpm包</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 15px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  color: #777;
+  font-size: 14px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 12px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 1px 4px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+</head>
+<body>
+<h1><center>定制rpm包</h1>
+<h2>1.1 面试题</h2>
+<p>有100台服务器想安装系统。你有什么方案快速部署并优化吗？需要多少时间搞定？</p>
+<h3>1.1.1 解决方案</h3>
+<ul>
+<li>
+<p>(1） tar打包：先编译安装、打包、批量分发、解包；</p>
+</li>
+<li>
+<p>(2) saltstack、puppet、ansible批量部署；</p>
+</li>
+<li>
+<p>(3) 定制rpm所、搭建yum仓库、yum安装；</p>
+</li>
+<li>
+<p>(4) openstack虚拟机镜像和docker窗口分发。</p>
+</li>
+</ul>
+<h2>1.2 安装软件的方式</h2>
+<h3>1.2.1 编译安装</h3>
+<ul>
+<li>
+<p>优点</p>
+<ul>
+<li>
+<p>按需开启功能</p>
+</li>
+<li>
+<p>可定制（定制安装目录和软件功能）、一情况下不需要网络、可选择软件版本</p>
+</li>
+</ul>
+</li>
+<li>
+<p>缺点</p>
+<ul>
+<li>
+<p>需要查找并实验出适合的编译参数</p>
+</li>
+<li>
+<p>软件版本升级时，要注意某些参数已经取消掉了</p>
+</li>
+<li>
+<p>MySQL、PHP等软件编译耗时过长</p>
+</li>
+<li>
+<p>慢、复杂、需要查找编译参数、找依赖麻烦、纯编译依赖比较复杂</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3>1.2.2 yum安装</h3>
+<ul>
+<li>
+<p>优点</p>
+<ul>
+<li>
+<p>全自动化安装</p>
+</li>
+<li>
+<p>简单、便捷</p>
+</li>
+<li>
+<p>不需要为依赖问题发愁了</p>
+</li>
+</ul>
+</li>
+<li>
+<p>缺点</p>
+<ul>
+<li>
+<p>自主性太差</p>
+</li>
+<li>
+<p>需要网络、网络不好时，下载速度慢</p>
+</li>
+<li>
+<p>没有办法定制、软件的功能、存放位置都已经固定好了，不易变更</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3>1.2.3 二进制安装</h3>
+<ul>
+<li>
+<p>优点：简单、快</p>
+</li>
+<li>
+<p>缺点：不能定制、包容量大</p>
+</li>
+</ul>
+<h3>1.2.4 定制rpm包※</h3>
+<ul>
+<li>
+<p>流程：根据需求编译软件==&gt;制件rpm包==&gt;搭建内网yum仓库==&gt;yum安装</p>
+</li>
+<li>
+<p>优点：结合编译安装与yum安装两者的优点</p>
+</li>
+<li>
+<p>缺点 ：rpm包的通用性差，只能适用于公司的环境，第一步编译安装复杂、打包后不能再次更改、一般人不会定制rpm包</p>
+</li>
+</ul>
+<h2>1.3 RPM简介</h2>
+<p>英文全称是Red Hat Package Manager，即Red Hat包管理器。</p>
+<p>几乎所有的Linux发行版本都使用这种形式的软件包管理安装、更新和卸载软件。</p>
+<p>rpm命令有五种基本功能（但不包括创建软件包）：安装、卸载、升级、查询、验证。</p>
+<h2>1.4 FPM打包工具</h2>
+<p>FPM的作者是jordansissel</p>
+<p>FPM的GitHub：<a href="https://github.com/jordansissel/fpm">https://github.com/jordansissel/fpm </a></p>
+<p>FPM功能简单理解：就是将一种类型的包转换成另一种类型。</p>
+<h3>1.4.1 支持的源类型包</h3>
+<pre>
+dir       #<==将目录打包成所需要的类型，可以用于源码编译安装的软件包
+rpm       #<==对rpm进行转换
+gem       #<==对rubygem包进行转换
+python    #<==将python模块打包成相应的类型
+</pre>
+<h3>1.4.2 支持的目标类型包</h3>
+<pre>
+rpm       #<==转换为rpm包
+deb       #<==转换为deb包
+solaris   #<==转换为solaris包
+puppet    #<==转换为puppet模块
+</pre>
+<h3>1.4.3 FPM安装</h3>
+<p>fpm是ruby写的，因此系统环境需要ruby，且ruby版本号大于1.8.5。</p>
+<pre>
+#<==安装ruby模块
+yum -y install ruby rubygems ruby-devel
+#<==添加阿里云的Rubygems仓库
+gem source -a http://mirrors.aliyun.com/rubygems/
+#<==移除原生的Ruby仓库
+gem source -r https://rubygems.org/
+#<==安装fpm
+gem install json -v 1.7.7
+gem install cabin -v 0.6
+gem install backports -v 2.6.2
+gem install arr-pm -v 0.0.9
+gem install clamp -v 0.6
+#gem install childprocess -v 0.5.9
+gem install fpm -v 1.3.3
+#<==指定安装fpm 1.3.3版本的软件
+</pre>
+<h3>1.4.4 FPM参数</h3>
+<p>详细使用见：fpm --help</p>
+<p>常用参数如下：</p>
+<pre>
+-s                #<==source，指定源类型
+-t                #<==target，指定目标类型，即想要制作为什么包
+-n                #<==name，指定包的名字
+-v                #<==version，指定包的版本号
+-C                #<==change，指定打包的相对路径
+-d                #<==depend，指定依赖于哪些包
+-f                #<==force，第二次打包时目录下如果有同名安装包存在，则覆盖它
+-p                #<==输出的安装包的目录，不想放在当前目录下就需要指定
+--post-install    #<==软件包安装完成之后所要运行的脚本；同--after-install
+--pre-install     #<==软件包安装完成之前所要运行的脚本；同--before-install
+--post-uninstall  #<==软件包卸载完成之后所要运行的脚本；同--after-remove
+--pre-uninstall   #<==软件包卸载完成之前所要运行的脚本；同--before-remove
+</pre>
+<h2>1.5 实战定制nginx的RPM包</h2>
+<h3>1.5.1 系统环境</h3>
+<pre>
+[root@m01 ~]# cat /etc/redhat-release     #<==系统版本
+CentOS release 6.7 (Final)
+[root@m01 ~]# uname -r                    #<==64位系统，及内核版本
+2.6.32-573.el6.x86_64
+[root@m01 ~]# getenforce                  #<==关selinux
+Disabled
+[root@m01 ~]# /etc/init.d/iptables status #<==关防火墙
+iptables：未运行防火墙。
+</pre>
+<h3>1.5.2 准备操作</h3>
+<pre>
+[root@m01 ~]# mkdir /application/tools/ -p #<==统一软件包存放目录
+[root@m01 ~]# sed -i 's#keepcache=0#keepcache=1#g' /etc/yum.conf#<==开启yum缓存
+[root@m01 ~]# find /var/cache/ -type f -name '*rpm'|xargs rm -f
+#<==清空本机已有yum缓存
+[root@m01 ~]# cd /application/tools/
+[root@m01 tools]# wget -q http://nginx.org/download/nginx-1.6.3.tar.gz
+#<==下载nginx-1.6.3
+</pre>
+<h3>1.5.3 编译安装nginx</h3>
+<pre>
+yum install pcre pcre-devel openssl openssl-devel -y
+rpm -qa openssl openssl-devel pcre pcre-devel
+find /var/cache/ -type f -name '*rpm'|xargs cp -t /tmp/
+cd /tmp/ && tar zcf nginx_yum.tar.gz *.rpm
+sz nginx_yum.tar.gz
+--------------------------------------------------------------------------------
+cd /application/tools/
+useradd nginx -M -s /sbin/nologin 
+tar xf nginx-1.6.3.tar.gz 
+cd nginx-1.6.3
+./configure --prefix=/application/nginx-1.6.3 --user=nginx --group=nginx --with-http_ssl_module --with-http_stub_status_module
+echo $?
+make && make install
+echo $?
+ln -s /application/nginx-1.6.3/ /application/nginx
+ll -d /application/nginx-1.6.3/ /application/nginx
+</pre>
+<h4>过程</h4>
+<pre>
+[root@m01 tmp]# yum install pcre pcre-devel openssl openssl-devel -y
+#<==安装pcre库，openssl软件，因为等下编译安装时，需要安装ssl模块
+[root@m01 tmp]# rpm -qa openssl openssl-devel pcre pcre-devel#<==检查
+openssl-devel-1.0.1e-48.el6_8.1.x86_64
+pcre-7.8-7.el6.x86_64
+openssl-1.0.1e-48.el6_8.1.x86_64
+pcre-devel-7.8-7.el6.x86_64
+[root@m01 tools]# find /var/cache/ -type f -name '*rpm'|xargs cp -t /tmp/
+#<==另存rpm包，因为很多人的系统环境可能不一致，需要的rpm包可能不同。
+[root@m01 tools]# cd /tmp/ && tar zcf nginx_yum.tar.gz *.rpm#<==打包
+[root@m01 tmp]# cd /application/tools/#<==切换到软件包存放目录
+[root@m01 tools]# useradd nginx -M -s /sbin/nologin #<==添加nginx用户
+[root@m01 tools]# tar xf nginx-1.6.3.tar.gz #<==解包
+[root@m01 tools]# cd nginx-1.6.3#<==切换到nginx1.6.3目录下
+[root@m01 nginx-1.6.3]# ./configure --prefix=/application/nginx-1.6.3 --user=nginx --group=nginx --with-http_ssl_module --with-http_stub_status_module#<==配置过程
+内容省略，自行脑补……
+[root@m01 nginx-1.6.3]# echo $?#<==检查配置过程是否出错
+0
+[root@m01 nginx-1.6.3]# make && make install#<==编译&&配置过程
+内容省略，自行脑补……
+[root@m01 nginx-1.6.3]# echo $?#<==检查编译与配置过程是否出错
+0
+[root@m01 nginx-1.6.3]# ln -s /application/nginx-1.6.3/ /application/nginx
+#<==做软链接
+[root@m01 nginx-1.6.3]# ll -d /application/nginx-1.6.3/ /application/nginx
+#<==检查
+lrwxrwxrwx 1 root root   25 2016-07-29 17:37 /application/nginx -> /application/nginx-1.6.3/
+drwxr-xr-x 6 root root 4096 2016-07-29 17:37 /application/nginx-1.6.3/
+</pre>
+<h3>1.5.4 编写脚本</h3>
+<pre>
+mkdir /server/scripts -p
+cd /server/scripts/
+cat >> nginx_rpm.sh <&lt;EOF
+#!/bin/bash
+useradd nginx -M -s /sbin/nologin
+ln -s /application/nginx-1.6.3/ /application/nginx
+EOF
+</pre>
+<h4>过程</h4>
+<pre>
+[root@m01 nginx-1.6.3]# mkdir /server/scripts -p
+[root@m01 nginx-1.6.3]# cd /server/scripts/
+[root@m01 scripts]# vim nginx_rpm.sh#<==这是安装完rpm包要执行的脚本
+#!/bin/bash
+useradd nginx -M -s /sbin/nologin
+ln -s /application/nginx-1.6.3/ /application/nginx
+</pre>
+<h3>1.5.5 打包</h3>
+<pre>
+fpm -s dir -t rpm -n nginx -v 1.6.3 -d 'pcre,pcre-devel,openssl,openssl-devel' --post-install /server/scripts/nginx_rpm.sh -f /application/nginx-1.6.3/
+ll -h
+sz nginx_rpm.sh
+sz nginx-1.6.3-1.x86_64.rpm
+</pre>
+<h4>过程</h4>
+<pre>
+[root@m01 scripts]# fpm -s dir -t rpm -n nginx -v 1.6.3 -d 'pcre,pcre-devel,openssl,openssl-devel' --post-install /server/scripts/nginx_rpm.sh -f /application/nginx-1.6.3/
+no value for epoch is set, defaulting to nil {:level=>:warn}
+no value for epoch is set, defaulting to nil {:level=>:warn}
+Created package {:path=>"nginx-1.6.3-1.x86_64.rpm"}
+fpm命令参数详解：
+-s                #<==source，指定源类型
+-t                #<==target，指定目标类型，即想要制作为什么包
+-n                #<==name，指定包的名字
+-v                #<==version，指定包的版本号
+-d                #<==depend，指定依赖于哪些包，包有多个，用逗号隔开
+-f                #<==force，第二次打包时目录下如果有同名安装包存在，则覆盖它
+--post-install    #<==软件包安装完成之后所要运行的脚本；同--after-install
+--pre-install     #<==软件包安装完成之前所要运行的脚本；同--before-instal
+</pre>
+<h2>1.6 rpm常用命令组合</h2>
+<h3>查看</h3>
+<pre>
+rpm -qpi包名            #<==查看rpm包详细信息
+rpm -qpl包名            #<==查看rpm包里面的内容
+rpm -qpR包名            #<==查看rpm包的依赖
+rpm -qp --scripts 包名  #<==查看rpm包带的执行脚本，执行脚本不是以文件形式存在
+rpm -qa                 #<==查看系统内所有已安装的rpm包
+</pre>
+<h3>安装</h3>
+<pre>
+rpm -ivh包名            #<==安装rpm包
+rpm -ivh --aid 包名     #<==解决rpm包循环依赖的问题
+</pre>
+<h3>1.6.1 rpm命令的参数</h3>
+<h4>查看</h4>
+<pre>
+-a        #<==all，所有
+-q        #<==query，查询
+-p        #<==package,包
+-i        #<==info，信息
+-l        #<==list，列表
+-R        #<==requires，依赖
+--scripts #<==显示脚本
+</pre>
+<h4>安装</h4>
+<pre>
+-i        #<==install，安装
+-v        #<==显示详细信息（Print verbose information）
+-h        #<==hash，显示哈希值
+--aid  Add suggested packages to the transaction set（事务集）when needed.
+</pre>
+<h2>1.7 注意事项</h2>
+<h3>1.7.1 相对路径问题</h3>
+<p>fpm打包时，一定要用绝对路径！</p>
+<p>fpm -s dir -t rpm -n nginx -v 1.6.3 .#&lt;==相当路径</p>
+<p>fpm -s dir -t rpm -n nginx -v 1.6.3 /application/nginx-1.6.3/#&lt;==绝对路径</p>
+<p>使用rpm -qpl查看rpm包的内容fpm类似tar打包一样，只是fpm打的包能够被yum命令识别而已</p>
+<h4>过程</h4>
+<pre>
+[root@m01 scripts]# cd /application/nginx-1.6.3/#<==切换到目录下，再打包
+[root@m01 nginx-1.6.3]# fpm -s dir -t rpm -n nginx -v 1.6.3 .#<==点来代表当前目录
+[root@m01 nginx-1.6.3]# rpm -qpl nginx-1.6.3-1.x86_64.rpm
+#<==所有的目录，都从系统根目录开始了，所以，一定要用绝对路径打包
+/conf/fastcgi.conf
+/conf/fastcgi.conf.default
+/conf/fastcgi_params
+省略……
+</pre>
+<h3>1.7.2 软链接问题</h3>
+<p>fpm打包时，直接打包原目录（后面加不加/，都没有问题），不要打包软链接目录！</p>
+<p><code>fpm -s dir -t rpm -n nginx -v 1.6.3 /application/nginx</code>（不加/，这个软链接代表一个文件）</p>
+<p>打包看似成功，但查看包的内容，只是一个软链接文件</p>
+<p>原因，目录结尾的/问题，这有点类似rm删除软链接目录</p>
+<p><code>fpm -s dir -t rpm -n nginx -v 1.6.3 /application/nginx/</code>（加/，这个软链接代表一个目录）</p>
+<h2>1.8 安装rpm包</h2>
+<p>利用backup服务器测试。</p>
+<p>安装rpm包的三种方法：</p>
+<h3>1.8.1 rpm命令安装</h3>
+<pre>
+[root@backup tools]# rpm -ivh nginx-1.6.3-1.x86_64.rpm 
+error: Failed dependencies:
+        pcre-devel is needed by nginx-1.6.3-1.x86_64
+        openssl-devel is needed by nginx-1.6.3-1.x86_64
+#<==但会报如上依赖错误，需要先yum安装依赖才能安装rpm包。
+</pre>
+<h4>解决方法</h4>
+<pre>
+#<==先利用yum安装上面的两个依赖包，再执行rpm。
+yum -y pcre-devel openssl-devel
+</pre>
+<h3>1.8.2 yum命令安装rpm包</h3>
+<pre>
+[root@backup tools]# yum localinstall nginx-1.6.3-1.x86_64.rpm -y
+#<==这个命令会自动先安装rpm包的依赖，然后再安装rpm包。
+</pre>
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->
