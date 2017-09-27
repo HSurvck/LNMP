@@ -4,18 +4,18 @@ use grandesystem;
 
 create table student
 (
-	sid INT(10) PRIMARY KEY,
+	sid INT(10) PRIMARY KEY identity(1,1),
 	sname CHAR(20),
 	gender ENUM('male','female')
 );
 create table course
 (
-	cid INT(10) PRIMARY KEY,
+	cid INT(10) PRIMARY KEY identity(1,1),
 	cname CHAR(20)
 );
 create table mark
 (
-	mid INT(10) PRIMARY KEY,
+	mid INT(10) PRIMARY KEY identity(1,1),
 	sid INT(10),
 	cid INT(10),
 	score INT(10),
