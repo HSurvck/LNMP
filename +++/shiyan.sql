@@ -6,7 +6,7 @@ create table student
 (
 	sid INT(10) PRIMARY KEY,
 	sname CHAR(20),
-	gender CHAR(20)
+	gender ENUM('male','female')
 );
 create table course
 (
