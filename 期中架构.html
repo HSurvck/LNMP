@@ -1,0 +1,1247 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>期中架构</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 15px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  color: #777;
+  font-size: 14px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 12px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 1px 4px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+</head>
+<body>
+<h1><center>期中架构述职</h1>
+<h2>期中架构要求</h2>
+<h3>期中架构服务器规划</h3>
+<p><center></p>
+<p>服务器规划表：</p>
+<table>
+<thead>
+<tr>
+	<th>服务器规划</th>
+	<th>数量</th>
+	<th>作用说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td>负载均衡服务器</td>
+	<td>两台</td>
+	<td>对访问网站的流量进行分流，减少流量对某台服务器的压力</td>
+</tr>
+<tr>
+	<td>web 服务器</td>
+	<td>三台</td>
+	<td>处理用户页面访问请求 （Nginx）</td>
+</tr>
+<tr>
+	<td>NFS 存储</td>
+	<td>一台</td>
+	<td>存储图片、附件、头像等静态数据</td>
+</tr>
+<tr>
+	<td>备份服务器</td>
+	<td>一台</td>
+	<td>对全网服务器数据，进行实时与定时备份</td>
+</tr>
+<tr>
+	<td>数据库服务器</td>
+	<td>一台</td>
+	<td>对动态变化数据进行存储（文本内容）</td>
+</tr>
+<tr>
+	<td>管理服务器</td>
+	<td>一台</td>
+	<td>1. 作为 yum 仓库服务器，提供全网服务器的软件下载 </br>2. 跳板机、操作审计 </br>3. VPN（pptp）</br>4. 监控（zabbix）</br>5. 兼职批量分发和管理</td>
+</tr>
+</tbody>
+</table>
+<p></center></p>
+<h3>期中架构 IP 规划</h3>
+<p><center></p>
+<p>主机 IP 规划表：</p>
+<table>
+<thead>
+<tr>
+	<th>服务器说明</th>
+	<th>外网 IP （NAT）</th>
+	<th>内网 IP （LAN 区段）</th>
+	<th>主机名称规划</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td>A1-nginx 负载服务器 01</td>
+	<td>10.0.0.5/24</td>
+	<td>172.16.1.5/24</td>
+	<td>lb01</td>
+</tr>
+<tr>
+	<td>A2-nginx 负载服务器 02</td>
+	<td>10.0.0.6/24</td>
+	<td>172.16.1.6/24</td>
+	<td>lb02</td>
+</tr>
+<tr>
+	<td>B1-nginx web 服务器</td>
+	<td>10.0.0.7/24</td>
+	<td>172.16.1.7/24</td>
+	<td>web02</td>
+</tr>
+<tr>
+	<td>B2-nginx web 服务器</td>
+	<td>10.0.0.8/24</td>
+	<td>172.16.1.8/24</td>
+	<td>web01</td>
+</tr>
+<tr>
+	<td>B3-nginx web 服务器</td>
+	<td>10.0.0.9/24</td>
+	<td>172.16.1.9/24</td>
+	<td>web03</td>
+</tr>
+<tr>
+	<td>C3-mysql 数据库服务器</td>
+	<td>10.0.0.51/24</br>(生产环境不设置)</td>
+	<td>172.16.1.51/24</td>
+	<td>db01</td>
+</tr>
+<tr>
+	<td>C1-NFS 存储服务器</td>
+	<td>10.0.0.31/24</br>(生产环境不设置)</td>
+	<td>172.16.1.31/24</td>
+	<td>nfs01</td>
+</tr>
+<tr>
+	<td>C2-rsync 存储服务器</td>
+	<td>10.0.0.41/24</br>(生产环境不设置)</td>
+	<td>172.16.1.41/24</td>
+	<td>backup</td>
+</tr>
+<tr>
+	<td>X-管理服务器</td>
+	<td>10.0.0.61/24</br>(生产环境不设置)</td>
+	<td>172.16.1.61/24</td>
+	<td>m01</td>
+</tr>
+</tbody>
+</table>
+<p></center></p>
+<h2>基础项</h2>
+<h3>X-管理服务器</h3>
+<pre>
+#!/bin/bash
+
+\rm -f /root/.ssh/id_dsa*
+
+ssh-keygen -t dsa -f /root/.ssh/id_dsa -P "" -q
+
+yum install libselinux-python -y
+
+yum install ansible -y
+
+for ip in 5 6 7 8 9 31 41 51
+do 
+   sshpass -p123456 ssh-copy-id -i /root/.ssh/id_dsa.pub "-o StrictHostKeyChecking=no root@172.16.1.$ip"
+done
+
+if [ $? -ne 0 ]
+then
+
+echo "LALALA~"
+
+else
+
+cat >> /etc/ansible/hosts <&lt;EOF
+[lb01]
+172.16.1.5
+
+[lb02]
+172.16.1.6
+
+[nfs]
+172.16.1.31
+
+[backup]
+172.16.1.41
+
+[web]
+172.16.1.7
+172.16.1.8
+172.16.1.9
+
+[db]
+172.16.1.51
+EOF
+
+ansible all -m ping
+
+fi
+</pre>
+<h3>C3-mysql 数据库服务器</h3>
+<pre>
+#!/bin/bash
+
+mkdir -p /application
+
+if [ -f /server/tools/mysql-5.6.34-linux-glibc2.5-x86_64.tar.gz ]
+then
+	cd /server/tools/ && tar xf mysql-5.6.34-linux-glibc2.5-x86_64.tar.gz
+	
+	egrep "^mysql.*/sbin/nologin$" /etc/passwd || useradd -s /sbin/nologin  -M mysql
+
+	mv /server/tools/mysql-5.6.34-*-x86_64 /application/mysql-5.6.34
+	
+	cd && ln -s /application/mysql-5.6.34/ /application/mysql
+	
+	chown -R mysql.mysql /application/mysql/data
+	
+	/application/mysql/scripts/mysql_install_db --basedir=/application/mysql --datadir=/application/mysql/data --user=mysql
+	
+	cp /application/mysql/support-files/mysql.server  /etc/init.d/mysqld
+	
+	chmod +x /etc/init.d/mysqld
+	
+	sed -i 's#/usr/local/mysql#/application/mysql#g' /application/mysql/bin/mysqld_safe /etc/init.d/mysqld
+	
+	cp /application/mysql/support-files/my-default.cnf /etc/my.cnf
+	
+	chkconfig --add mysqld && chkconfig mysqld on
+	
+	/etc/init.d/mysqld start
+fi
+
+/application/mysql/bin/mysql -u root -e "create database wordpress;"
+/application/mysql/bin/mysql -u root -e "grant all privileges on wordpress.* to 'wordpress'@'10.0.0.%' identified by '123456';"
+/application/mysql/bin/mysql -u root -e "create database dedecms;"
+/application/mysql/bin/mysql -u root -e "grant all privileges on dedecms.* to 'dedecms'@'10.0.0.%' identified by '123456';"
+/application/mysql/bin/mysql -u root -e "create database discuz;"
+/application/mysql/bin/mysql -u root -e "grant all privileges on discuz.* to 'discuz'@'10.0.0.%' identified by '123456';"
+/application/mysql/bin/mysql -u root -e "grant select,delete,update,create,drop on *.* to 'prow'@'10.0.0.%' identified by '123456'"
+</pre>
+<h3>C2-rsync 存储服务器</h3>
+<pre>
+#!/bin/bash
+test -f /usr/bin/rsync || yum install rsync -y
+
+egrep "^rsync.*/sbin/nologin" /etc/passwd || useradd rsync -s /sbin/nologin
+
+BackupDir=/backup                     # [backup] path=$BackupDir
+DataDir=/data                         # [data] path = $DataDir
+PassWordFile=/etc/rsync.password      # secrets file = $PassWordDir
+PassWord=oldboy123                    # echo "$PassWord" > /etc/rsync.password
+
+test -d $BackupDir || mkdir $BackupDir -p ;chown -R rsync.rsync $BackupDir
+
+test -d $DataDir || mkdir $DataDir -p ;chown -R rsync.rsync $DataDir
+
+echo "rsync_backup:$PassWord" > $PassWordFile && chmod 600 $PassWordFile
+
+cat > /etc/rsyncd.conf <<EOF
+uid = rsync				
+gid = rsync
+use chroot = no
+max connections = 200
+timeout = 300
+pid file = /var/run/rsyncd.pid
+lock file = /var/run/rsync.lock
+log file = /var/log/rsyncd.log
+ignore errors
+read only = false
+list = false
+hosts allow = 172.16.1.0/24
+hosts deny = 0.0.0.0/32
+auth users = rsync_backup
+secrets file = $PassWordFile
+
+[backup]
+comment = "backup dir by oldboy"
+path = $BackupDir
+[data]
+comment = 'inotifywait + rsync'
+path = $DataDir
+EOF
+
+test -f /etc/init.d/xinetd || yum install xinetd -y
+
+sed -i '6s#yes#no#g' /etc/xinetd.d/rsync && /etc/init.d/xinetd restart
+
+chkconfig xinetd on
+
+cat >> /etc/mail.rc <&lt;EOF
+set from=17611165711@163.com
+set smtp=smtp.163.com
+set smtp-auth-user=17611165711@163.com
+set smtp-auth-password=h1116j
+set smtp-auth=login"
+EOF
+
+mkdir -p /server/scripts && cat > /server/scripts/backup_server.sh <<EOF
+#!/bin/bash
+
+# check data info
+cd /backup
+find /backup/ -type f -name "finger.txt"| \\
+xargs md5sum -c >/tmp/check_info.txt
+
+# send mail to sa
+mail -s "check_info" 1337173414@qq.com < /tmp/check_info.txt
+
+# delete 180 day ago, but save everyweek 1
+find /backup/ -type f -mtime +180 ! -name "*_1.tar.gz" -delete
+EOF
+</pre>
+<h3>C1-NFS 存储服务器</h3>
+<pre>
+#!/bin/bash
+
+test -f /etc/init.d/rpcbind || yum install -y rpcbind ;test -f /etc/init.d/nfs || yum install -y nfs-utils
+
+cat >>/etc/exports <&lt;EOF
+/data 172.16.1.0/24(rw,sync,no_all_squash,root_squash)
+EOF
+
+for i in wordpress dedecms discuz
+do
+mkdir -p /data/$i
+done
+
+chown -R nfsnobody.nfsnobody /data && chmod 1777 /data/*
+
+/etc/init.d/rpcbind restart
+
+chkconfig rpcbind on
+
+/etc/init.d/nfs restart
+
+chkconfig nfs on
+
+yum install inotify-tools -y
+
+test -f /usr/bin/rsync || yum install rsync -y
+
+test -d /backup || mkdir /backup
+
+PassWord=oldboy123
+PassWordDir=/etc/rsync.password
+
+echo "$PassWord" > $PassWordDir && chmod 600 $PassWordDir
+
+cat > /etc/init.d/inotify <&lt;EOF
+# chkconfig: 2345 99 99
+# description:
+inotifywait -mrq /data --format '%w%f' -e create,delete,close_write,moved_to|\
+while read line
+do
+	rsync -az --delete /data/ rsync_backup@172.16.1.41::data --password-file=/etc/rsync.password
+done &
+EOF
+
+chmod +x /etc/init.d/inotify && \
+chkconfig --add inotify && \
+chkconfig inotify on && \
+/etc/init.d/inotify
+
+mkdir -p /server/scripts && cat > /server/scripts/backup_nfs.sh <&lt;EOF
+#!/bin/bash
+
+Backup_Dir="/backup"
+Host_IP=\`hostname -i\`
+Date_Info=\`date +%F_%w -d "-1day"\`
+
+# create backup dir
+mkdir -p \$Backup_Dir/\$Host_IP
+
+# backup info compress
+cd / && \\
+tar zchf \$Backup_Dir/\$Host_IP/sys_backup_\${Date_Info}.tar.gz var/spool/cron/root etc/rc.local server/scripts etc/sysconfig/iptables
+
+# check data info, create finger file
+cd \$Backup_Dir && \\
+find ./ -type f -name "*_\${Date_Info}.tar.gz" | \\
+xargs md5sum >\$Backup_Dir/\$Host_IP/finger.txt
+
+# push backup data to backup server
+rsync -az \$Backup_Dir/ rsync_backup@172.16.1.41::backup --password-file=/etc/rsync.password
+
+# delete 7 day ago
+find \$Backup_Dir/ -type f -name "*.tar.gz" -mtime +7 -delete
+EOF
+</pre>
+<h3>Nginx+PHP web 服务器</h3>
+<pre>
+#!/bin/bash
+
+yum -y install gcc automake autoconf libtool make
+
+yum install gcc gcc-c++
+
+yum install -y pcre-devel openssl-devel
+
+egrep "^www.*/sbin/nologin$" /etc/passwd || useradd -s /sbin/nologin -M www
+
+mkdir -p /server/tools && cd /server/tools
+
+wget --tries=0 http://nginx.org/download/nginx-1.10.3.tar.gz
+
+tar xf nginx-1.10.3.tar.gz
+
+cd nginx-1.10.3
+
+./configure --prefix=/application/nginx-1.10.3 --user=www --group=www --with-http_ssl_module --with-http_stub_status_module 
+
+make && make install
+
+cd && ln -s /application/nginx-1.10.3/ /application/nginx
+
+echo "/application/nginx/sbin/nginx" >> /etc/rc.local
+
+/application/nginx/sbin/nginx
+
+wget --tries=0 -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-6.repo
+
+yum install -y zlib libjpeg freetype libpng gd curl zlib-devel libxml2-devel libjpeg-devel freetype-devel libpng-devel gd-devel curl-devel libjpeg-turbo-devel libcurl-devel libxslt-devel
+
+yum -y install libmcrypt-devel mhash mcrypt libiconv-devel
+
+cd /server/tools/ && \
+test -f php-5.5.32.tar.gz || \
+wget --tries=0 http://ftp.ntu.edu.tw/php/distributions/php-5.5.32.tar.gz && \
+tar xf php-5.5.32.tar.gz
+
+cd php-5.5.32 &&  touch ext/phar/phar.phar
+
+./configure \
+--prefix=/application/php-5.5.32 \
+--enable-mysqlnd \
+--with-mysql=mysqlnd \
+--with-mysqli=mysqlnd \
+--with-pdo-mysql=mysqlnd \
+--with-freetype-dir \
+--with-jpeg-dir \
+--with-png-dir \
+--with-zlib \
+--with-libxml-dir=/usr \
+--enable-xml \
+--disable-rpath \
+--enable-bcmath \
+--enable-shmop \
+--enable-sysvsem \
+--enable-inline-optimization \
+--with-curl \
+--enable-mbregex \
+--enable-fpm \
+--enable-mbstring \
+--with-mcrypt \
+--with-gd \
+--with-gettext \
+--enable-gd-native-ttf \
+--with-openssl \
+--with-mhash \
+--enable-pcntl \
+--enable-sockets \
+--with-xmlrpc \
+--enable-zip \
+--enable-soap \
+--enable-short-tags \
+--enable-static \
+--with-xsl \
+--with-fpm-user=www \
+--with-fpm-group=www \
+--enable-opcache=no  \
+--enable-ftp
+#--with-openssl[=Dir]
+make && make install
+
+cd && ln -s /application/php-5.5.32/ /application/php
+
+cd /server/tools/php-5.5.32 && cp php.ini-production /application/php/lib/php.ini
+
+cd /application/php/etc/ && cp php-fpm.conf.default php-fpm.conf
+
+echo "/application/php/sbin/php-fpm" >> /etc/rc.local && /application/php/sbin/php-fpm
+
+AppDir=/application/nginx         #106 108
+ConfDir=/application/nginx/conf   #112
+
+for Web in www blog bbs
+do
+mkdir ${AppDir}/html/${Web} -p
+
+echo "${Web} `hostname`" > ${AppDir}/html/${Web}/index.html
+
+done
+
+cat > ${ConfDir}/nginx.conf <&lt;EOF
+worker_processes  3;
+events {
+	worker_connections  1024;
+}
+http {
+	include       mime.types;
+	default_type  application/octet-stream;
+	sendfile        on;
+	keepalive_timeout  65;
+	server {
+		listen       80;
+		server_name  blog.etiantian.org;
+		location / {
+			root   html/blog;
+			index  index.php index.html;
+		}
+		location ~* .*\.(php|php5)?$ {
+			root html/blog;
+			fastcgi_pass  127.0.0.1:9000;
+			fastcgi_index index.php;
+			include fastcgi.conf;
+		}
+	}
+	server {
+		listen       80;
+		server_name  www.etiantian.org;
+		location / {
+			root   html/www;
+			index  index.php index.html;
+		}
+		location ~* .*\.(php|php5)?$ {
+			root html/www;
+			fastcgi_pass  127.0.0.1:9000;
+			fastcgi_index index.php;
+			include fastcgi.conf;
+		}
+	}
+	server {
+		listen       80;
+		server_name  bbs.etiantian.org;
+		location / {
+			root   html/bbs;
+			index  index.php index.html;
+		}
+		location ~* .*\.(php|php5)?$ {
+			root html/bbs;
+			fastcgi_pass  127.0.0.1:9000;
+			fastcgi_index index.php;
+			include fastcgi.conf;
+		}
+	}
+	server {
+		listen       80;
+		server_name  status.etiantian.org;
+		location / {
+		stub_status on;
+		access_log   off;
+		}
+	}
+}
+EOF
+
+#web zhan dian
+
+cd /server/tools && \
+test -f /server/tools/wordpress-4.7.3-zh_CN.tar.gz || \
+wget --tries=0 https://wordpress.org/wordpress-4.7.3.tar.gz &&\
+tar xf /server/tools/wordpress-4.7.3*
+
+cd /server/tools/wordpress && \
+mv ./*  /application/nginx/html/blog/
+
+mkdir -p ${AppDir}/html/blog/wp-content/uploads && \
+chown -R www.www /application/nginx/html/blog/
+
+rm -rf /server/tools/wordpress
+
+cd /server/tools && \
+test -f /server/tools/DedeCMS-V5.7-UTF8-SP2.tar.gz || \
+wget --tries=0 http://updatenew.dedecms.com/base-v57/package/DedeCMS-V5.7-UTF8-SP2.tar.gz && \
+tar xf DedeCMS-V5.7-UTF8-SP2.tar.gz
+
+cd /server/tools/DedeCMS-V5.7-UTF8-SP2/uploads && \
+mv ./* /application/nginx/html/www/ && \
+chown -R www.www /application/nginx/html/www/
+
+cd /application/nginx/html/www/uploads && rm -rf ./*
+
+rm -rf /server/tools/DedeCMS-V5.7-UTF8-SP2
+
+cd /server/tools && \
+test -f /server/tools/Discuz_X3.2_SC_UTF8.zip || \
+wget --tries=0 http://download.comsenz.com/DiscuzX/3.2/Discuz_X3.2_SC_UTF8.zip && \
+unzip Discuz_X3.2_SC_UTF8.zip -d ./Discuz_X3.2_SC_UTF8
+
+cd /server/tools/Discuz_X3.2_SC_UTF8/upload && \
+mv ./* /application/nginx/html/bbs/ && \
+chown -R www.www /application/nginx/html/bbs/
+
+cd /application/nginx/html/bbs/data/attachment/ && rm -rf ./*
+
+rm -rf /server/tools/Discuz_X3.2_SC_UTF8
+
+
+/application/nginx/sbin/nginx -t && \
+/application/nginx/sbin/nginx -s reload
+
+#nfs_web
+
+Ip=172.16.1.31
+
+yum install -y nfs-utils
+
+yum install -y rpcbind
+
+/etc/init.d/rpcbind restart && \
+/etc/init.d/nfs restart
+
+chkconfig nfs on
+
+mount -t nfs ${Ip}:/data/wordpress ${AppDir}/html/blog/wp-content/uploads
+mount -t nfs ${Ip}:/data/dedecms ${AppDir}/html/www/uploads
+mount -t nfs ${Ip}:/data/discuz ${AppDir}/html/bbs/data/attachment
+
+cat >> /etc/rc.local <&lt;EOF
+mount -t nfs ${Ip}:/data/wordpress ${AppDir}/html/blog/wp-content/uploads
+mount -t nfs ${Ip}:/data/dedecms ${AppDir}/html/www/uploads
+mount -t nfs ${Ip}:/data/discuz ${AppDir}/html/bbs/data/attachment
+EOF
+
+df -h
+
+
+#backup_web
+
+test -f /usr/bin/rsync || yum install rsync -y
+
+test -d /backup || mkdir /backup
+
+PassWord=oldboy123
+PassWordDir=/etc/rsync.password
+
+echo "$PassWord" > $PassWordDir && chmod 600 $PassWordDir
+
+mkdir /server/scripts/ -p && cat > /server/scripts/backup_web.sh <&lt;EOF
+#!/bin/bash
+
+Backup_Dir="/backup"
+Host_IP=\`hostname -i\`
+Date_Info=\`date +%F_%w -d "-1day"\`
+
+# create backup dir
+mkdir -p \$Backup_Dir/\$Host_IP
+
+# backup info compress
+cd / && \\
+tar zchf \$Backup_Dir/\$Host_IP/sys_backup_\${Date_Info}.tar.gz var/spool/cron/root etc/rc.local server/scripts etc/sysconfig/iptables && \\
+tar zchf \$Backup_Dir/\$Host_IP/www_backup__\${Date_Info}.tar.gz application/nginx/html/www/ && \\
+tar zchf \$Backup_Dir/\$Host_IP/bbs_backup__\${Date_Info}.tar.gz application/nginx/html/bbs/ && \\
+tar zchf \$Backup_Dir/\$Host_IP/blog_backup__\${Date_Info}.tar.gz application/nginx/html/blog/ && \\
+tar zchf \$Backup_Dir/\$Host_IP/logs_backup__\${Date_Info}.tar.gz application/nginx/logs/
+
+# check data info, create finger file
+cd \$Backup_Dir &&\
+find ./ -type f -name "*_\${Date_Info}.tar.gz"|\
+xargs md5sum >\$Backup_Dir/\$Host_IP/finger.txt
+
+# push backup data to backup server
+rsync -az \$Backup_Dir/ rsync_backup@172.16.1.41::backup --password-file=/etc/rsync.password
+
+# delete 7 day ago
+find \$Backup_Dir/ -type f -name "*.tar.gz" -mtime +7 -delete
+EOF
+</pre>
+<h3>A2-nginx 负载服务器 02</h3>
+<pre>
+#!/bin/bash
+
+yum -y install gcc automake autoconf libtool make
+
+yum install gcc gcc-c++
+
+yum install -y pcre-devel openssl-devel
+
+egrep "^www.*/sbin/nologin$" /etc/passwd || useradd -s /sbin/nologin -M www
+
+mkdir -p /server/tools && cd /server/tools && test -f nginx-1.10.3.tar.gz || \
+wget --tries=0 http://nginx.org/download/nginx-1.10.3.tar.gz && \
+tar xf nginx-1.10.3.tar.gz
+
+cd nginx-1.10.3
+
+./configure --prefix=/application/nginx-1.10.3/  --user=www --group=www --with-http_ssl_module --with-http_stub_status_module 
+
+make && make install
+
+cd && ln -s /application/nginx-1.10.3/ /application/nginx
+
+echo 'net.ipv4.ip_nonlocal_bind = 1' >>/etc/sysctl.conf && sysctl -p
+
+cat > /application/nginx/conf/nginx.conf <&lt;EOF
+worker_processes  1;
+events {
+	worker_connections  1024;
+}
+http {
+	include       mime.types;
+	default_type  application/octet-stream;
+	sendfile        on;
+	keepalive_timeout  65;
+	log_format main '\$remote_addr - \$remote_user [\$time_local] "\$request" '
+                    '\$status \$body_bytes_sent "\$http_referer" '
+                    '"\$http_user_agent" "\$http_x_forwarded_for"';
+	upstream server_poors {
+		server 10.0.0.8:80;
+		server 10.0.0.7:80;
+		server 10.0.0.9:80;
+	}
+    server {
+        listen 10.0.0.3:80;
+        server_name blog.etiantian.org;
+        location / {
+            proxy_pass http://server_poors;
+            proxy_set_header Host \$host;
+            proxy_set_header X-Forwarded-For \$remote_addr;
+        }
+	}
+	server {
+		listen 10.0.0.3:80;
+		server_name www.etiantian.org;
+		location / {
+			proxy_pass http://server_poors;
+			proxy_set_header Host \$host;
+			proxy_set_header X-Forwarded-For \$remote_addr;
+		}
+	}
+	server {
+		listen 10.0.0.3:80;
+		server_name bbs.etiantian.org;
+		location / {
+			proxy_pass http://server_poors;
+			proxy_set_header Host \$host;
+			proxy_set_header X-Forwarded-For \$remote_addr;
+		}
+	}
+}
+EOF
+
+echo "/application/nginx/sbin/nginx" >> /etc/rc.local
+
+/application/nginx/sbin/nginx -t && /application/nginx/sbin/nginx
+
+test -f /etc/init.d/keepalived || yum install -y keepalived
+
+mkdir -p /server/scripts && cat > /server/scripts/check_web.sh <&lt;EOF
+#!/bin/bash
+
+test [ `ps -ef |grep -c [n]ginx` -lt 2 ] && /etc/init.d/keepalived stop
+
+EOF
+
+cat > /etc/keepalived/keepalived.conf <<EOF
+global_defs {
+   notification_email {
+     acassen@firewall.loc
+     failover@firewall.loc
+     sysadmin@firewall.loc
+   }
+   notification_email_from Alexandre.Cassen@firewall.loc
+   smtp_server 192.168.200.1
+   smtp_connect_timeout 30
+   router_id lb01
+}
+vrrp_script check_web {
+script "/server/scripts/check_web.sh"
+interval 2
+weight 2
+}
+vrrp_instance VI_1 {
+    state BACKUP
+    interface eth0
+    virtual_router_id 51
+    priority 100
+    advert_int 1
+    authentication {
+        auth_type PASS
+        auth_pass 1111
+    }
+    virtual_ipaddress {
+        10.0.0.3/24 dev eth1 label eth1:1
+    }
+	track_script {
+		check_web.sh
+	}
+}
+EOF
+
+echo "/etc/init.d/keepalived start">> /etc/rc.local && /etc/init.d/keepalived start
+
+#cat > /server/scripts/start_keepalived.sh <&lt;EOF
+##!/bin/bash
+#
+#while ture
+#do
+#	test [ `ps -ef |grep -c [n]ginx` -gt 1 ] && /etc/init.d/keepalived start
+#   sleep 10
+#done &
+#EOF
+#
+#echo "/bin/bash /server/scripts/start_keepalived.sh" >> /etc/rc.local && /bin/bash /server/scripts/start_keepalived.sh
+</pre>
+<h3>A1-nginx 负载服务器 01</h3>
+<pre>
+#!/bin/bash
+
+yum -y install gcc automake autoconf libtool make
+
+yum install gcc gcc-c++
+
+yum install -y pcre-devel openssl-devel
+
+egrep "^www.*/sbin/nologin$" /etc/passwd || useradd -s /sbin/nologin -M www
+
+mkdir -p /server/tools && cd /server/tools && test -f nginx-1.10.3.tar.gz || \
+wget --tries=0 http://nginx.org/download/nginx-1.10.3.tar.gz && \
+tar xf nginx-1.10.3.tar.gz
+
+cd nginx-1.10.3
+
+./configure --prefix=/application/nginx-1.10.3/  --user=www --group=www --with-http_ssl_module --with-http_stub_status_module 
+
+make && make install
+
+cd && ln -s /application/nginx-1.10.3/ /application/nginx
+
+echo 'net.ipv4.ip_nonlocal_bind = 1' >>/etc/sysctl.conf && sysctl -p
+
+cat > /application/nginx/conf/nginx.conf <&lt;EOF
+worker_processes  1;
+events {
+	worker_connections  1024;
+}
+http {
+	include       mime.types;
+	default_type  application/octet-stream;
+	sendfile        on;
+	keepalive_timeout  65;
+	log_format main '\$remote_addr - \$remote_user [\$time_local] "\$request" '
+                    '\$status $body_bytes_sent "\$http_referer" '
+                    '"\$http_user_agent" "\$http_x_forwarded_for"';
+	upstream server_poors {
+		server 10.0.0.8:80;
+		server 10.0.0.7:80;
+		server 10.0.0.9:80;
+	}
+    server {
+        listen 10.0.0.3:80;
+        server_name blog.etiantian.org;
+        location / {
+            proxy_pass http://server_poors;
+            proxy_set_header Host \$host;
+            proxy_set_header X-Forwarded-For \$remote_addr;
+        }
+	}
+	server {
+		listen 10.0.0.3:80;
+		server_name www.etiantian.org;
+		location / {
+			proxy_pass http://server_poors;
+			proxy_set_header Host \$host;
+			proxy_set_header X-Forwarded-For \$remote_addr;
+		}
+	}
+	server {
+		listen 10.0.0.3:80;
+		server_name bbs.etiantian.org;
+		location / {
+			proxy_pass http://server_poors;
+			proxy_set_header Host \$host;
+			proxy_set_header X-Forwarded-For \$remote_addr;
+		}
+	}
+}
+EOF
+
+echo "/application/nginx/sbin/nginx" >> /etc/rc.local
+
+/application/nginx/sbin/nginx -t && /application/nginx/sbin/nginx
+
+#keepalived
+
+test -f /etc/init.d/keepalived || yum install -y keepalived
+
+mkdir -p /server/scripts && cat > /server/scripts/check_web.sh <&lt;EOF
+#!/bin/bash
+
+if [ \`ps -ef |grep -c [n]ginx\` -lt 2 ]
+	then
+	/etc/init.d/keepalived stop
+fi
+
+EOF
+
+cat > /etc/keepalived/keepalived.conf <&lt;EOF
+global_defs {
+   router_id lb01
+}
+vrrp_script check_web {
+script "/server/scripts/check_web.sh"
+interval 2
+weight 2
+}
+vrrp_instance VI_1 {
+    state MASTER
+    interface eth0
+    virtual_router_id 51
+    priority 150
+    advert_int 1
+    authentication {
+        auth_type PASS
+        auth_pass 1111
+    }
+    virtual_ipaddress {
+        10.0.0.3/24 dev eth1 label eth1:1
+    }
+	track_script {
+		check_web
+	}
+}
+EOF
+
+echo "/etc/init.d/keepalived start">> /etc/rc.local && /etc/init.d/keepalived start
+
+#cat > /server/scripts/start_keepalived.sh <&lt;EOF
+##!/bin/bash
+#
+#while ture
+#do
+#	test [ \`ps -ef |grep -c [n]ginx\` -gt 1 ] && /etc/init.d/keepalived start
+#   sleep 10
+#done &
+#EOF
+#
+#echo "/bin/bash /server/scripts/start_keepalived.sh" >> /etc/rc.local && /bin/bash /server/scripts/start_keepalived.sh
+
+</pre>
+<h2>扩展项</h2>
+<h3>phpmyadmin</h3>
+<pre>
+#!/bin/bash
+mkdir -p /server/tools && cd /server/tools && \
+wget --tries=0 https://files.phpmyadmin.net/phpMyAdmin/4.7.4/phpMyAdmin-4.7.4-all-languages.zip && \
+unzip phpMyAdmin-4.7.4-all-languages.zip -d /application/nginx/html/www/ && \
+cd /application/nginx/html/www/ && mv phpMyAdmin-4.7.4-all-languages phpmyadmin
+
+sed -i "39d ; 38a\$cfg['PmaAbsoluteUri'] = '//www.etiantian.org/phpmyadmin';" /application/nginx/html/www/phpmyadmin/libraries/config.default.php
+sed -i "94d ; 93a\$cfg['blowfish_secret'] = '1116';" /application/nginx/html/www/phpmyadmin/libraries/config.default.php
+sed -i "117d ; 116a\$cfg['Servers'][\$i]['host'] = '10.0.0.51';" /application/nginx/html/www/phpmyadmin/libraries/config.default.php
+sed -i "124d ; 123a\$cfg['Servers'][\$i]['port'] = '3306';" /application/nginx/html/www/phpmyadmin/libraries/config.default.php
+sed -i "248d ; 247a\$cfg['Servers'][\$i]['user'] = 'prow';" /application/nginx/html/www/phpmyadmin/libraries/config.default.php
+sed -i "255d ; 254a\$cfg['Servers'][\$i]['password'] = '123456';" /application/nginx/html/www/phpmyadmin/libraries/config.default.php
+
+#  39 $cfg['PmaAbsoluteUri'] = '';
+#  94 $cfg['blowfish_secret'] = '';
+# 117 $cfg['Servers'][$i]['host'] = 'localhost';
+# 124 $cfg['Servers'][$i]['port'] = '';
+# 234 $cfg['Servers'][$i]['auth_type'] = 'cookie';
+# 248 $cfg['Servers'][$i]['user'] = 'root';
+# 255 $cfg['Servers'][$i]['password'] = '';
+</pre>
+<h3>ntp</h3>
+<h4>server</h4>
+<pre>
+rm -rf /var/spool/cron/root
+
+sed -i "8d;7a\#restrict default kod nomodify notrap nopeer noquery" /etc/ntp.conf
+sed -i "21a\server pool.ntp.org prefer" /etc/ntp.conf
+
+/etc/init.d/ntpd start
+
+chkconfig ntpd on && chkconfig --list ntpd
+</pre>
+<h4>client</h4>
+<pre>
+test -f /usr/sbin/ntpdate || yum -y install ntpdate
+echo "*/5 * * * * /usr/sbin/ntpdate 172.16.1.61 >/dev/null 2>&1" > /var/spool/cron/root
+sed -i "21a\server 172.16.1.61 prefer" /etc/ntp.conf
+</pre>
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->

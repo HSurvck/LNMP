@@ -3,7 +3,7 @@
 rm -rf /var/spool/cron/root
 
 sed -i "8d;7a\#restrict default kod nomodify notrap nopeer noquery" /etc/ntp.conf
-sed -i "21a\server pool.ntp.org perfer" /etc/ntp.conf
+sed -i "21a\server pool.ntp.org prefer" /etc/ntp.conf
 
 /etc/init.d/ntpd start
 

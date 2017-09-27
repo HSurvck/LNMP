@@ -2,7 +2,7 @@
 
 test -f /usr/sbin/ntpdate || yum -y install ntpdate
 echo "*/5 * * * * /usr/sbin/ntpdate 172.16.1.61 >/dev/null 2>&1" > /var/spool/cron/root
-sed -i "21a\server 172.16.1.61 perfer" /etc/ntp.conf
+sed -i "21a\server 172.16.1.61 prefer" /etc/ntp.conf
 
 mkdir -p /application
 
