@@ -10,8 +10,6 @@ egrep "^www.*/sbin/nologin$" /etc/passwd || useradd -s /sbin/nologin -M www
 
 mkdir -p /server/tools && cd /server/tools
 
-wget --tries=0 http://nginx.org/download/nginx-1.10.3.tar.gz
-
 tar xf nginx-1.10.3.tar.gz
 
 cd nginx-1.10.3

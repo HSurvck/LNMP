@@ -10,8 +10,6 @@ egrep "^www.*/sbin/nologin$" /etc/passwd || useradd -s /sbin/nologin -M www
 
 mkdir -p /server/tools && cd /server/tools
 
-wget --tries=0 http://nginx.org/download/nginx-1.10.3.tar.gz
-
 tar xf nginx-1.10.3.tar.gz
 
 cd nginx-1.10.3
@@ -33,8 +31,6 @@ yum install -y zlib libjpeg freetype libpng gd curl zlib-devel libxml2-devel lib
 yum -y install libmcrypt-devel mhash mcrypt libiconv-devel
 
 cd /server/tools/ && \
-test -f php-5.5.32.tar.gz || \
-wget --tries=0 http://ftp.ntu.edu.tw/php/distributions/php-5.5.32.tar.gz && \
 tar xf php-5.5.32.tar.gz
 
 cd php-5.5.32 &&  touch ext/phar/phar.phar
@@ -162,48 +158,6 @@ http {
 	}
 }
 EOF
-
-#web zhan dian
-
-cd /server/tools && \
-test -f /server/tools/wordpress-4.7.3-zh_CN.tar.gz || \
-wget --tries=0 https://wordpress.org/wordpress-4.7.3.tar.gz &&\
-tar xf /server/tools/wordpress-4.7.3*
-
-cd /server/tools/wordpress && \
-mv ./*  /application/nginx/html/blog/
-
-mkdir -p ${AppDir}/html/blog/wp-content/uploads && \
-chown -R www.www /application/nginx/html/blog/
-
-rm -rf /server/tools/wordpress
-
-cd /server/tools && \
-test -f /server/tools/DedeCMS-V5.7-UTF8-SP2.tar.gz || \
-wget --tries=0 http://updatenew.dedecms.com/base-v57/package/DedeCMS-V5.7-UTF8-SP2.tar.gz && \
-tar xf DedeCMS-V5.7-UTF8-SP2.tar.gz
-
-cd /server/tools/DedeCMS-V5.7-UTF8-SP2/uploads && \
-mv ./* /application/nginx/html/www/ && \
-chown -R www.www /application/nginx/html/www/
-
-cd /application/nginx/html/www/uploads && rm -rf ./*
-
-rm -rf /server/tools/DedeCMS-V5.7-UTF8-SP2
-
-cd /server/tools && \
-test -f /server/tools/Discuz_X3.2_SC_UTF8.zip || \
-wget --tries=0 http://download.comsenz.com/DiscuzX/3.2/Discuz_X3.2_SC_UTF8.zip && \
-unzip Discuz_X3.2_SC_UTF8.zip -d ./Discuz_X3.2_SC_UTF8
-
-cd /server/tools/Discuz_X3.2_SC_UTF8/upload && \
-mv ./* /application/nginx/html/bbs/ && \
-chown -R www.www /application/nginx/html/bbs/
-
-cd /application/nginx/html/bbs/data/attachment/ && rm -rf ./*
-
-rm -rf /server/tools/Discuz_X3.2_SC_UTF8
-
 
 /application/nginx/sbin/nginx -t && \
 /application/nginx/sbin/nginx -s reload

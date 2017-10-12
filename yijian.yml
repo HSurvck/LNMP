@@ -18,30 +18,37 @@
       copy: src=mysql-5.6.34-linux-glibc2.5-x86_64.tar.gz dest=/server/tools/
     - name: install mysql
       script: ./db01.sh
-- hosts: 10.0.0.8
+- hosts: web
   tasks:
     - name: creat /server/tools
       file: path=/server/tools state=directory
     - name: copy dedecms discuz wordpress php
       copy: src={{ item }} dest=/server/tools/
-      with_item:
-        - DedeCMS-V5.7-UTF8-SP2.tar.gz
-        - Discuz_X3.2_SC_UTF8.zip
-        - wordpress-4.7.3-zh_CN.tar.gz
+      with_items:
         - php-5.5.32.tar.gz
-      - name: install nginx php nfs rpc
+        - nginx-1.10.3.tar.gz
+    - name: install nginx php nfs rpc
       script: ./web01.sh
     - name: backup_web
       cron: name=backup_nfs minute=00 hour=00 job='/bin/sh /server/scripts/backup_web.sh &>/dev/null'
+    - unarchive: 
+       src: ./web.tar.gz
+       dest: /application/nginx/html/ 
+       owner: www
+       group: www
 - hosts: lb01
   tasks:
     - name: creat /server/tools
       file: path=/server/tools state=directory
+    - name: copy nginx
+      copy: src=nginx-1.10.3.tar.gz dest=/server/tools/
     - name: install nginx
-      script: /root/LNMP/lb01.sh
+      script: ./lb01.sh
 - hosts: lb02
   tasks:
     - name: creat /server/tools
       file: path=/server/tools state=directory
+    - name: copy nginx
+      copy: src=nginx-1.10.3.tar.gz dest=/server/tools/
     - name: install nginx
       script: ./lb02.sh
