@@ -295,7 +295,6 @@ img {
 <h2>期中架构要求</h2>
 <h3>期中架构服务器规划</h3>
 <p><center></p>
-<p>服务器规划表：</p>
 <table>
 <thead>
 <tr>
@@ -340,7 +339,6 @@ img {
 <p></center></p>
 <h3>期中架构 IP 规划</h3>
 <p><center></p>
-<p>主机 IP 规划表：</p>
 <table>
 <thead>
 <tr>
@@ -409,6 +407,15 @@ img {
 </table>
 <p></center></p>
 <h2>基础项</h2>
+<ol>
+<li>rsync 全网备份</li>
+<li>NFS 实时同步</li>
+<li>LNMP（www、bbs、blog、phpmyadmin）</li>
+<li>用户文件挂到 NFS 上</li>
+<li>数据库分离</li>
+<li>Web负载均衡、高可用构建（Nginx+keepalived）</li>
+<li>批量管理服务（ansible+ssh）</li>
+</ol>
 <h3>X-管理服务器</h3>
 <pre>
 #!/bin/bash
@@ -1200,7 +1207,6 @@ echo "/etc/init.d/keepalived start">> /etc/rc.local && /etc/init.d/keepalived st
 #echo "/bin/bash /server/scripts/start_keepalived.sh" >> /etc/rc.local && /bin/bash /server/scripts/start_keepalived.sh
 
 </pre>
-<h2>扩展项</h2>
 <h3>phpmyadmin</h3>
 <pre>
 #!/bin/bash
@@ -1224,6 +1230,20 @@ sed -i "255d ; 254a\$cfg['Servers'][\$i]['password'] = '123456';" /application/n
 # 248 $cfg['Servers'][$i]['user'] = 'root';
 # 255 $cfg['Servers'][$i]['password'] = '';
 </pre>
+<h2>扩展项</h2>
+<ol>
+<li>zabbix 监控</li>
+<li>kickstart/cobbler 无人值守安装系统</li>
+<li>VPN 项目</li>
+<li>搭建审计、跳板机</li>
+<li>ntp 时间服务器</li>
+<li>所有内网服务器上网 （iptables）</li>
+<li>web 服务器会话（session）共享</li>
+<li>实现 https 访问</li>
+<li>nfs 高可用（keepalived）</li>
+<li>yum 仓库以及rpm定制</li>
+<li>一键自动化安装整个集群</li>
+</ol>
 <h3>ntp</h3>
 <h4>server</h4>
 <pre>
