@@ -33,4 +33,5 @@ chkconfig --add mysqld && chkconfig mysqld on
 /application/mysql/bin/mysql -u root -e "create database discuz;"
 /application/mysql/bin/mysql -u root -e "grant all privileges on discuz.* to 'discuz'@'10.0.0.%' identified by '123456';"
 /application/mysql/bin/mysql -u root -e "grant select,delete,update,create,drop on *.* to 'prow'@'10.0.0.%' identified by '123456'"
+/application/mysql/bin/mysql -u root </tmp/web.sql
 

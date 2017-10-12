@@ -16,6 +16,8 @@
       file: path=/server/tools state=directory
     - name: copy mysql
       copy: src=mysql-5.6.34-linux-glibc2.5-x86_64.tar.gz dest=/server/tools/
+    - name: copy mysql
+      copy: src=web.sql dest=/tmp/
     - name: install mysql
       script: ./db01.sh
 - hosts: web
