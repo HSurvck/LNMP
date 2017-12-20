@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 test -f /etc/init.d/rpcbind || yum install -y rpcbind ;test -f /etc/init.d/nfs || yum install -y nfs-utils
 
 cat >>/etc/exports << EOF
